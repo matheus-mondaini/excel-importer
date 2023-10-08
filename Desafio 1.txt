@@ -1,0 +1,10 @@
+Desafio 1
+---------
+- ler um excel e inserir na base
+- linguagem C#
+- tem que ser possível informar o nome do arquivo excel
+- o banco será SQL Server
+
+* Enviar o fontes e instruções de como rodar
+
+
