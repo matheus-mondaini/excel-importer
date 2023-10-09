@@ -6,6 +6,8 @@ using System.Diagnostics.Metrics;
 using System.Drawing;
 using System;
 using Microsoft.VisualBasic.ApplicationServices;
+using DesafioImportaExcel.Controllers;
+using DesafioImportaExcel.Models;
 
 namespace DesafioImportaExcel
 {
@@ -87,25 +89,38 @@ namespace DesafioImportaExcel
         {
             if (planilhaLida)
             {
-                try
+                if (worksheetIndex != null)
                 {
-                    // Obtenha os dados da DataGridView em uma lista de DataRow
-                    List<DataRow> rows = new List<DataRow>();
-                    foreach (DataGridViewRow dgvRow in dataGridView1.Rows)
+                    try
                     {
-                        if (!dgvRow.IsNewRow)
+                        // Obtenha os dados da DataGridView em uma lista de objetos
+                        List<object> data = new List<object>();
+                        foreach (DataGridViewRow dgvRow in dataGridView1.Rows)
                         {
-                            rows.Add(((DataRowView)dgvRow.DataBoundItem).Row);
+                            if (!dgvRow.IsNewRow)
+                            {
+                                // Adicione o objeto correto com base no tipo de planilha (Cliente ou Debitos)
+                                if (worksheetIndex == 0)
+                                {
+                                    data.Add((Cliente)dgvRow.DataBoundItem);
+                                }
+                                else if (worksheetIndex == 1)
+                                {
+                                    data.Add((Debitos)dgvRow.DataBoundItem);
+                                }
+                            }
                         }
-                    }
 
-                    ImportacaoPlanilhaExcel.InsertDataIntoDatabase(rows, (int)worksheetIndex);
-                    MessageBox.Show("Dados inseridos com sucesso no banco de dados!");
+                        // Chame o método InsertDataIntoDatabase passando a lista de objetos e o worksheetIndex
+                        ImportacaoPlanilhaExcel.InsertDataIntoDatabase(data, (int)worksheetIndex);
+                        MessageBox.Show("Dados inseridos com sucesso no banco de dados!");
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show("Ocorreu um erro ao inserir os dados: " + ex.Message);
+                    }
                 }
-                catch (Exception ex)
-                {
-                    MessageBox.Show("Ocorreu um erro ao inserir os dados: " + ex.Message);
-                }
+
 
                 /*
                     string connectionString = @"Server = x\x; Database = xr; User Id = x; Password = x;";

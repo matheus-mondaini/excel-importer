@@ -5,8 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Data.SqlClient;
 
-namespace DesafioImportaExcel
-{ 
+namespace DesafioImportaExcel.Controllers
+{
     public class GerenciadorConexaoBancoDados
     {
         private readonly string _server;
@@ -22,7 +22,7 @@ namespace DesafioImportaExcel
             _password = password;
 
             GetConnection();
-    }
+        }
 
         public SqlConnection GetConnection()
         {

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DesafioImportaExcel
+namespace DesafioImportaExcel.Models
 {
     public class Debitos
     {

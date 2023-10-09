@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using System.Data;
 using System.Data.SqlClient;
 
-namespace DesafioImportaExcel
+namespace DesafioImportaExcel.Controllers
 {
     public class TabelaDebitos
     {
@@ -46,7 +46,7 @@ namespace DesafioImportaExcel
                     using (SqlCommand command = new SqlCommand(createTableQuery, connection))
                     {
                         var NumeroDeLinhas = command.ExecuteNonQuery();
-                        if (NumeroDeLinhas>0)
+                        if (NumeroDeLinhas > 0)
                             MessageBox.Show("Tabela de Debitos Criada");
                     }
                 }

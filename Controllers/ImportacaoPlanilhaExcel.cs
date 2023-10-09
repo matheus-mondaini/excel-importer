@@ -7,8 +7,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Globalization;
+using DesafioImportaExcel.Models;
 
-namespace DesafioImportaExcel
+namespace DesafioImportaExcel.Controllers
 {
     public class ImportacaoPlanilhaExcel
     {
@@ -157,64 +158,64 @@ namespace DesafioImportaExcel
 
                 //Caso fosse utilizado datateble ao invés de uma instância da classe:
 
-                    //DataTable dataTable = new DataTable();
-                    
-                    //try
-                    //{
+                //DataTable dataTable = new DataTable();
 
-                    //    using (var package = new ExcelPackage(new System.IO.FileInfo(excelFilePath)))
-                    //    {
-                    //        var worksheet = package.Workbook.Worksheets[0]; // Supondo que os dados estão na primeira planilha
+                //try
+                //{
 
-                    //        int rowCount = worksheet.Dimension.Rows;
+                //    using (var package = new ExcelPackage(new System.IO.FileInfo(excelFilePath)))
+                //    {
+                //        var worksheet = package.Workbook.Worksheets[0]; // Supondo que os dados estão na primeira planilha
 
-                    //        for (int row = 2; row <= rowCount; row++)
-                    //        {
-                    //            DataRow dataRow = dataTable.NewRow();
-                    //            dataRow["Fatura"] = worksheet.Cells[row, 1].Text;
-                    //            dataRow["Cliente"] = int.Parse(worksheet.Cells[row, 2].Text);
-                    //            dataRow["Emissao"] = DateTime.Parse(worksheet.Cells[row, 3].Text);
-                    //            dataRow["Vencimento"] = DateTime.Parse(worksheet.Cells[row, 4].Text);
-                    //            dataRow["Valor"] = decimal.Parse(worksheet.Cells[row, 5].Text);
-                    //            dataRow["Juros"] = decimal.Parse(worksheet.Cells[row, 6].Text);
-                    //            dataRow["Descontos"] = decimal.Parse(worksheet.Cells[row, 7].Text);
-                    //            dataRow["Pagamento"] = DateTime.Parse(worksheet.Cells[row, 8].Text);
-                    //            dataRow["ValorPago"] = decimal.Parse(worksheet.Cells[row, 9].Text);
-                    //            dataTable.Rows.Add(dataRow);
-                    //        }
-                    //    }
-                    //}
-                    
-                    //return DataTable;
+                //        int rowCount = worksheet.Dimension.Rows;
+
+                //        for (int row = 2; row <= rowCount; row++)
+                //        {
+                //            DataRow dataRow = dataTable.NewRow();
+                //            dataRow["Fatura"] = worksheet.Cells[row, 1].Text;
+                //            dataRow["Cliente"] = int.Parse(worksheet.Cells[row, 2].Text);
+                //            dataRow["Emissao"] = DateTime.Parse(worksheet.Cells[row, 3].Text);
+                //            dataRow["Vencimento"] = DateTime.Parse(worksheet.Cells[row, 4].Text);
+                //            dataRow["Valor"] = decimal.Parse(worksheet.Cells[row, 5].Text);
+                //            dataRow["Juros"] = decimal.Parse(worksheet.Cells[row, 6].Text);
+                //            dataRow["Descontos"] = decimal.Parse(worksheet.Cells[row, 7].Text);
+                //            dataRow["Pagamento"] = DateTime.Parse(worksheet.Cells[row, 8].Text);
+                //            dataRow["ValorPago"] = decimal.Parse(worksheet.Cells[row, 9].Text);
+                //            dataTable.Rows.Add(dataRow);
+                //        }
+                //    }
+                //}
+
+                //return DataTable;
 
 
                 //Caso não soubéssemos a planilha previamanete e precisássemos fazer de maneira mais genéria (também pode-se adaptar para uma instancia da classe ao invés de datatable):
 
-                    //DataTable dataTable = new DataTable();
+                //DataTable dataTable = new DataTable();
 
-                    //try
-                    //{
-                        //using (var package = new ExcelPackage(new System.IO.FileInfo(excelFilePath)))
-                        //{
-                        //    var worksheet = package.Workbook.Worksheets[0];
-                        //    foreach (var cell in worksheet.Cells[1, 1, 1, worksheet.Dimension.End.Column])
-                        //    {
-                        //        dataTable.Columns.Add(cell.Text);
-                        //    }
+                //try
+                //{
+                //using (var package = new ExcelPackage(new System.IO.FileInfo(excelFilePath)))
+                //{
+                //    var worksheet = package.Workbook.Worksheets[0];
+                //    foreach (var cell in worksheet.Cells[1, 1, 1, worksheet.Dimension.End.Column])
+                //    {
+                //        dataTable.Columns.Add(cell.Text);
+                //    }
 
-                        //    for (int row = 2; row <= worksheet.Dimension.End.Row; row++)
-                        //    {
-                        //        DataRow dataRow = dataTable.NewRow();
-                        //        for (int col = 1; col <= worksheet.Dimension.End.Column; col++)
-                        //        {
-                        //            dataRow[col - 1] = worksheet.Cells[row, col].Text;
-                        //        }
-                        //        dataTable.Rows.Add(dataRow);
-                        //    }
-                        //}
-                    //}
+                //    for (int row = 2; row <= worksheet.Dimension.End.Row; row++)
+                //    {
+                //        DataRow dataRow = dataTable.NewRow();
+                //        for (int col = 1; col <= worksheet.Dimension.End.Column; col++)
+                //        {
+                //            dataRow[col - 1] = worksheet.Cells[row, col].Text;
+                //        }
+                //        dataTable.Rows.Add(dataRow);
+                //    }
+                //}
+                //}
 
-                    //return DataTable;
+                //return DataTable;
 
 
             }
@@ -260,7 +261,8 @@ namespace DesafioImportaExcel
         }
 
 
-        public static void InsertDataIntoDatabase(List<DataRow> rows, int worksheetIndex)
+        public static void InsertDataIntoDatabase<T>(List<T> data, int worksheetIndex)
+
         {
             string connectionString = "";
 
@@ -268,48 +270,50 @@ namespace DesafioImportaExcel
             {
                 connection.Open();
 
-                foreach (DataRow row in rows)
+                foreach (var item in data)
                 {
                     string insertQuery = "";
-                    if (worksheetIndex == 0)
+                    if (worksheetIndex == 0 && item is Cliente cliente)
                     {
-                        TabelaCliente cliente = new TabelaCliente(connectionString);
-                        cliente.CriarTabelaSeNaoExistir();
+                        TabelaCliente tabelaCliente = new TabelaCliente(connectionString);
+                        tabelaCliente.CriarTabelaSeNaoExistir();
                         {
                             insertQuery = @"
-                            INSERT INTO Clientes (ID, Nome, Cidade, UF, CEP, CPF)
-                            VALUES (@ID, @Nome, @Cidade, @UF, @CEP, @CPF)";
+                        INSERT INTO Clientes (ID, Nome, Cidade, UF, CEP, CPF)
+                        VALUES (@ID, @Nome, @Cidade, @UF, @CEP, @CPF)";
                         }
 
                         using (SqlCommand command = new SqlCommand(insertQuery, connection))
                         {
-                            command.Parameters.AddWithValue("@ID", row["ID"]);
-                            command.Parameters.AddWithValue("@Nome", row["Nome"]);
-                            command.Parameters.AddWithValue("@Cidade", row["Cidade"]);
-                            command.Parameters.AddWithValue("@UF", row["UF"]);
-                            command.Parameters.AddWithValue("@CEP", row["CEP"]);
-                            command.Parameters.AddWithValue("@CPF", row["CPF"]);
+                            command.Parameters.AddWithValue("@ID", cliente.ID);
+                            command.Parameters.AddWithValue("@Nome", cliente.Nome);
+                            command.Parameters.AddWithValue("@Cidade", cliente.Cidade);
+                            command.Parameters.AddWithValue("@UF", cliente.UF);
+                            command.Parameters.AddWithValue("@CEP", cliente.CEP);
+                            command.Parameters.AddWithValue("@CPF", cliente.CPF);
+
+                            command.ExecuteNonQuery();
                         }
                     }
-                    else if (worksheetIndex == 1)
+                    else if (worksheetIndex == 1 && item is Debitos debitos)
                     {
-                        TabelaDebitos debitos = new TabelaDebitos(connectionString);
-                        debitos.CriarTabelaSeNaoExistir();
+                        TabelaDebitos tabelaDebitos = new TabelaDebitos(connectionString);
+                        tabelaDebitos.CriarTabelaSeNaoExistir();
                         insertQuery = @"
                         INSERT INTO Debitos (NumeroFatura, Cliente, Emissao, Vencimento, Valor, Juros, Descontos, Pagamento, ValorPago)
                         VALUES (@NumeroFatura, @Cliente, @Emissao, @Vencimento, @Valor, @Juros, @Descontos, @Pagamento, @ValorPago)";
 
                         using (SqlCommand command = new SqlCommand(insertQuery, connection))
                         {
-                            command.Parameters.AddWithValue("@Fatura", row["Fatura"]);
-                            command.Parameters.AddWithValue("@Cliente", row["Cliente"]);
-                            command.Parameters.AddWithValue("@Emissao", row["Emissao"]);
-                            command.Parameters.AddWithValue("@Vencimento", row["Vencimento"]);
-                            command.Parameters.AddWithValue("@Valor", row["Valor"]);
-                            command.Parameters.AddWithValue("@Juros", row["Juros"]);
-                            command.Parameters.AddWithValue("@Descontos", row["Descontos"]);
-                            command.Parameters.AddWithValue("@Pagamento", row["Pagamento"]);
-                            command.Parameters.AddWithValue("@ValorPago", row["ValorPago"]);
+                            command.Parameters.AddWithValue("@NumeroFatura", debitos.Fatura);
+                            command.Parameters.AddWithValue("@Cliente", debitos.Cliente);
+                            command.Parameters.AddWithValue("@Emissao", debitos.Emissao);
+                            command.Parameters.AddWithValue("@Vencimento", debitos.Vencimento);
+                            command.Parameters.AddWithValue("@Valor", debitos.Valor);
+                            command.Parameters.AddWithValue("@Juros", debitos.Juros);
+                            command.Parameters.AddWithValue("@Descontos", debitos.Descontos);
+                            command.Parameters.AddWithValue("@Pagamento", debitos.Pagamento);
+                            command.Parameters.AddWithValue("@ValorPago", debitos.ValorPago);
 
                             command.ExecuteNonQuery();
                         }
@@ -321,6 +325,68 @@ namespace DesafioImportaExcel
                 }
             }
         }
+
+        //public static void InsertDataIntoDatabase(List<DataRow> rows, int worksheetIndex)
+        //{
+        //    string connectionString = "";
+
+        //    using (SqlConnection connection = new SqlConnection(connectionString))
+        //    {
+        //        connection.Open();
+
+        //        foreach (DataRow row in rows)
+        //        {
+        //            string insertQuery = "";
+        //            if (worksheetIndex == 0)
+        //            {
+        //                TabelaCliente cliente = new TabelaCliente(connectionString);
+        //                cliente.CriarTabelaSeNaoExistir();
+        //                {
+        //                    insertQuery = @"
+        //                    INSERT INTO Clientes (ID, Nome, Cidade, UF, CEP, CPF)
+        //                    VALUES (@ID, @Nome, @Cidade, @UF, @CEP, @CPF)";
+        //                }
+
+        //                using (SqlCommand command = new SqlCommand(insertQuery, connection))
+        //                {
+        //                    command.Parameters.AddWithValue("@ID", row["ID"]);
+        //                    command.Parameters.AddWithValue("@Nome", row["Nome"]);
+        //                    command.Parameters.AddWithValue("@Cidade", row["Cidade"]);
+        //                    command.Parameters.AddWithValue("@UF", row["UF"]);
+        //                    command.Parameters.AddWithValue("@CEP", row["CEP"]);
+        //                    command.Parameters.AddWithValue("@CPF", row["CPF"]);
+        //                }
+        //            }
+        //            else if (worksheetIndex == 1)
+        //            {
+        //                TabelaDebitos debitos = new TabelaDebitos(connectionString);
+        //                debitos.CriarTabelaSeNaoExistir();
+        //                insertQuery = @"
+        //                INSERT INTO Debitos (NumeroFatura, Cliente, Emissao, Vencimento, Valor, Juros, Descontos, Pagamento, ValorPago)
+        //                VALUES (@NumeroFatura, @Cliente, @Emissao, @Vencimento, @Valor, @Juros, @Descontos, @Pagamento, @ValorPago)";
+
+        //                using (SqlCommand command = new SqlCommand(insertQuery, connection))
+        //                {
+        //                    command.Parameters.AddWithValue("@Fatura", row["Fatura"]);
+        //                    command.Parameters.AddWithValue("@Cliente", row["Cliente"]);
+        //                    command.Parameters.AddWithValue("@Emissao", row["Emissao"]);
+        //                    command.Parameters.AddWithValue("@Vencimento", row["Vencimento"]);
+        //                    command.Parameters.AddWithValue("@Valor", row["Valor"]);
+        //                    command.Parameters.AddWithValue("@Juros", row["Juros"]);
+        //                    command.Parameters.AddWithValue("@Descontos", row["Descontos"]);
+        //                    command.Parameters.AddWithValue("@Pagamento", row["Pagamento"]);
+        //                    command.Parameters.AddWithValue("@ValorPago", row["ValorPago"]);
+
+        //                    command.ExecuteNonQuery();
+        //                }
+        //            }
+        //            else
+        //            {
+        //                MessageBox.Show("Tipo de objeto não suportado ou índice de planilha inválido.");
+        //            }
+        //        }
+        //    }
+        //}
 
         //public static void InsertDataIntoDatabase(List<object> dataList, int worksheetIndex)
         //{

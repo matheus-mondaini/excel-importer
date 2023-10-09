@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DesafioImportaExcel
+namespace DesafioImportaExcel.Controllers
 {
     public class TabelaCliente
     {
