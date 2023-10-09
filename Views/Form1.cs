@@ -21,8 +21,6 @@ namespace DesafioImportaExcel
             InitializeComponent();
         }
 
-        //GerenciadorConexaoBancoDados ConectaSQL = new GerenciadorConexaoBancoDados("x\\x", "x", "x", "x");
-
         private void btnLerPlanilha_Click(object sender, EventArgs e)
         {
             OpenFileDialog openFileDialog = new OpenFileDialog();
@@ -73,12 +71,9 @@ namespace DesafioImportaExcel
             {
                 var worksheets = package.Workbook.Worksheets;
 
-                // Abre um forms para selecionar a planilha desejada
-                //var escolhaPlanilhaForm = new EscolhaPlanilhaForm(worksheets.Select(ws => ws.Name).ToList());
                 var escolhaPlanilhaForm = new EscolhaPlanilhaForm(planilhas);
                 if (escolhaPlanilhaForm.ShowDialog() == DialogResult.OK)
                 {
-                    //return escolhaPlanilhaForm.PlanilhaSelecionadaIndex;
                     return planilhas.IndexOf(escolhaPlanilhaForm.PlanilhaSelecionada);
                 }
             }
@@ -93,13 +88,11 @@ namespace DesafioImportaExcel
                 {
                     try
                     {
-                        // Obtenha os dados da DataGridView em uma lista de objetos
                         List<object> data = new List<object>();
                         foreach (DataGridViewRow dgvRow in dataGridView1.Rows)
                         {
                             if (!dgvRow.IsNewRow)
                             {
-                                // Adicione o objeto correto com base no tipo de planilha (Cliente ou Debitos)
                                 if (worksheetIndex == 0)
                                 {
                                     data.Add((Cliente)dgvRow.DataBoundItem);
@@ -111,7 +104,6 @@ namespace DesafioImportaExcel
                             }
                         }
 
-                        // Chame o método InsertDataIntoDatabase passando a lista de objetos e o worksheetIndex
                         ImportacaoPlanilhaExcel.InsertDataIntoDatabase(data, (int)worksheetIndex);
                         MessageBox.Show("Dados inseridos com sucesso no banco de dados!");
                     }
