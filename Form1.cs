@@ -33,23 +33,56 @@ namespace DesafioImportaExcel
 
                 try
                 {
-                    List<Debitos> debitosList = ImportacaoPlanilhaExcel.ReadDataFromExcel(excelFilePath);
-                    dataGridView1.DataSource = debitosList;
-                        //DataTable dataTable = ImportacaoPlanilhaExcel.ReadDataFromExcel(excelFilePath);
-                        //dataGridView1.DataSource = dataTable;
-                    planilhaLida = true;
-                    btnInserirNoBanco.Enabled = true; // Ativar o botão de inserção após a leitura
+                    List<string> planilhas = ImportacaoPlanilhaExcel.GetWorksheetNames(excelFilePath);
+
+                    if (planilhas.Count == 0)
+                    {
+                        MessageBox.Show("O arquivo Excel não contém planilhas.");
+                    }
+                    else
+                    {
+                        int? planilhaSelecionadaIndex = EscolherPlanilha(excelFilePath, planilhas);
+
+                        if (planilhaSelecionadaIndex != null)
+                        {
+                            string planilhaSelecionadaNome = planilhas[planilhaSelecionadaIndex.Value];
+                            List<dynamic> dados = ImportacaoPlanilhaExcel.ReadDataFromExcel(excelFilePath, (int)planilhaSelecionadaIndex);
+                            dataGridView1.DataSource = dados;
+                            planilhaLida = true;
+                            btnInserirNoBanco.Enabled = true;
+
+                        }
+                        else
+                        {
+                            MessageBox.Show("Nenhum WorkSheet foi selecionado.");
+                        }
+                    }
                 }
                 catch (Exception ex)
                 {
                     MessageBox.Show("Ocorreu um erro ao ler a planilha: " + ex.Message);
                 }
             }
-
-
-
-
         }
+
+        private int? EscolherPlanilha(FileInfo excelFilePath, List<string> planilhas)
+        {
+            using (var package = new ExcelPackage(excelFilePath))
+            {
+                var worksheets = package.Workbook.Worksheets;
+
+                // Abre um forms para selecionar a planilha desejada
+                //var escolhaPlanilhaForm = new EscolhaPlanilhaForm(worksheets.Select(ws => ws.Name).ToList());
+                var escolhaPlanilhaForm = new EscolhaPlanilhaForm(planilhas);
+                if (escolhaPlanilhaForm.ShowDialog() == DialogResult.OK)
+                {
+                    //return escolhaPlanilhaForm.PlanilhaSelecionadaIndex;
+                    return planilhas.IndexOf(escolhaPlanilhaForm.PlanilhaSelecionada);
+                }
+            }
+            return null;
+        }
+
         private void btnInserirNoBanco_Click(object sender, EventArgs e)
         {
             if (planilhaLida)

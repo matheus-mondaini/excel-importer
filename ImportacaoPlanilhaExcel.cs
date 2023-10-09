@@ -12,7 +12,52 @@ namespace DesafioImportaExcel
 {
     public class ImportacaoPlanilhaExcel
     {
-        public static List<Debitos> ReadDataFromExcel(FileInfo excelFilePath)
+        public static List<string> GetWorksheetNames(FileInfo excelFilePath)
+        {
+            var worksheetNames = new List<string>();
+
+            ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
+
+            try
+            {
+                using (ExcelPackage package = new ExcelPackage(excelFilePath))
+                {
+                    foreach (var worksheet in package.Workbook.Worksheets)
+                    {
+                        worksheetNames.Add(worksheet.Name);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Ocorreu um erro: " + ex.Message);
+            }
+
+            return worksheetNames;
+        }
+
+        public static List<dynamic> ReadDataFromExcel(FileInfo excelFilePath, int worksheetIndex)
+        {
+            var listaGenerica = new List<dynamic>();
+            if (worksheetIndex == 0)
+            {
+                List<Cliente> cliente = ReadClientesFromExcel(excelFilePath, worksheetIndex);
+                listaGenerica.AddRange(cliente);
+            }
+            else if (worksheetIndex == 1)
+            {
+                List<Debitos> debitos = ReadDebitosFromExcel(excelFilePath, worksheetIndex);
+                listaGenerica.AddRange(debitos);
+            }
+            else
+            {
+                MessageBox.Show("Esta não é um escolha disponível");
+                listaGenerica = null;
+            }
+            return listaGenerica;
+        }
+
+        public static List<Debitos> ReadDebitosFromExcel(FileInfo excelFilePath, int worksheetIndex)
         {
             var debitosList = new List<Debitos>();
 
@@ -23,24 +68,13 @@ namespace DesafioImportaExcel
 
                 using (ExcelPackage package = new ExcelPackage(excelFilePath))
                 {
-                    ExcelWorksheet worksheet = package.Workbook.Worksheets[1]; // Sabendo que os dados estão na primeira planilha
+
+                    ExcelWorksheet worksheet = package.Workbook.Worksheets[worksheetIndex]; // Sabendo que os dados estão na primeira planilha
 
                     int rowCount = worksheet.Dimension.Rows;
 
                     for (int row = 2; row <= rowCount; row++)
                     {
-                        //Debitos debito = new Debitos
-                        //{
-                        //    Fatura = worksheet.Cells[row, 1].ToString(),
-                        //    Cliente = int.Parse(worksheet.Cells[row, 2].ToString()),
-                        //    Emissao = DateTime.Parse(worksheet.Cells[row, 3].ToString()),
-                        //    Vencimento = DateTime.Parse(worksheet.Cells[row, 4].ToString()),
-                        //    Valor = decimal.Parse(worksheet.Cells[row, 5].ToString()),
-                        //    Juros = decimal.Parse(worksheet.Cells[row, 6].ToString()),
-                        //    Descontos = decimal.Parse(worksheet.Cells[row, 7].ToString()),
-                        //    Pagamento = DateTime.Parse(worksheet.Cells[row, 8].ToString()),
-                        //    ValorPago = decimal.Parse(worksheet.Cells[row, 9].ToString())
-                        //};
                         Debitos debito = new Debitos();
                         debito.Fatura = worksheet.Cells[row, 1].Text;
 
@@ -55,10 +89,10 @@ namespace DesafioImportaExcel
                             continue;
                         }
 
-                        // Converter data de Emissao (formato MM/dd/yyyy ou M/dd/yyyy)
-                        DateTime emissao;
+                        // Converter datas (formato"MM/dd/yyyy", "M/dd/yyyy", "MM/d/yyyy" ou "M/d/yyyy")
                         string[] dateFormats = { "MM/dd/yyyy", "M/dd/yyyy", "MM/d/yyyy", "M/d/yyyy" };
 
+                        DateTime emissao;
                         if (DateTime.TryParseExact(worksheet.Cells[row, 3].Text, dateFormats, CultureInfo.InvariantCulture, DateTimeStyles.None, out emissao))
                         {
                             debito.Emissao = emissao;
@@ -69,7 +103,6 @@ namespace DesafioImportaExcel
                             continue;
                         }
 
-                        // Converter data de Vencimento (formato MM/dd/yyyy ou M/dd/yyyy)
                         DateTime vencimento;
                         if (DateTime.TryParseExact(worksheet.Cells[row, 4].Text, dateFormats, CultureInfo.InvariantCulture, DateTimeStyles.None, out vencimento))
                         {
@@ -104,7 +137,6 @@ namespace DesafioImportaExcel
                             debito.Descontos = descontos;
                         }
 
-                        // Converter data de Pagamento (formato MM/dd/yyyy ou M/dd/yyyy)
                         DateTime pagamento;
                         if (DateTime.TryParseExact(worksheet.Cells[row, 8].Text, dateFormats, CultureInfo.InvariantCulture, DateTimeStyles.None, out pagamento))
                         {
@@ -192,6 +224,41 @@ namespace DesafioImportaExcel
             }
             return debitosList;
         }
+        public static List<Cliente> ReadClientesFromExcel(FileInfo excelFilePath, int worksheetIndex)
+        {
+            var clientesList = new List<Cliente>();
+
+            ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
+
+            try
+            {
+                using (ExcelPackage package = new ExcelPackage(excelFilePath))
+                {
+                    ExcelWorksheet worksheet = package.Workbook.Worksheets[worksheetIndex]; // Worksheet "Cliente"
+
+                    int rowCount = worksheet.Dimension.Rows;
+
+                    for (int row = 2; row <= rowCount; row++)
+                    {
+                        Cliente cliente = new Cliente();
+                        cliente.ID = int.Parse(worksheet.Cells[row, 1].Text);
+                        cliente.Nome = worksheet.Cells[row, 2].Text;
+                        cliente.Cidade = worksheet.Cells[row, 3].Text;
+                        cliente.UF = worksheet.Cells[row, 4].Text;
+                        cliente.CEP = worksheet.Cells[row, 5].Text;
+                        cliente.CPF = worksheet.Cells[row, 6].Text;
+
+                        clientesList.Add(cliente);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Ocorreu um erro na leitura da planilha Cliente: " + ex.Message);
+            }
+            return clientesList;
+        }
+
 
         public static void InsertDataIntoDatabase(List<DataRow> rows)
         {
