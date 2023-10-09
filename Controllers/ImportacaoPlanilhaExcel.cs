@@ -193,11 +193,24 @@ namespace DesafioImportaExcel.Controllers
             return clientesList;
         }
 
+        private static string ReadConnectionStringFromFile(string filePath)
+        {
+            try
+            {
+                string connectionString = File.ReadAllText(filePath);
+                return connectionString;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Erro ao ler a Connection String do arquivo: {ex.Message}");
+                return string.Empty;
+            }
+        }
 
         public static void InsertDataIntoDatabase<T>(List<T> data, int worksheetIndex)
 
         {
-            string connectionString = ""; //Removido antes do push por privacidade
+            string connectionString = ReadConnectionStringFromFile("connectionString.txt"); //Removido antes do push por privacidade
 
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
