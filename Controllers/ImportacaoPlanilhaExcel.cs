@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Globalization;
 using DesafioImportaExcel.Models;
+using Microsoft.VisualBasic.ApplicationServices;
 
 namespace DesafioImportaExcel.Controllers
 {
@@ -37,7 +38,7 @@ namespace DesafioImportaExcel.Controllers
             return worksheetNames;
         }
 
-        public static List<dynamic> ReadDataFromExcel(FileInfo excelFilePath, int worksheetIndex)
+        public static List<dynamic>? ReadDataFromExcel(FileInfo excelFilePath, int worksheetIndex)
         {
             var listaGenerica = new List<dynamic>();
             if (worksheetIndex == 0)
@@ -90,11 +91,11 @@ namespace DesafioImportaExcel.Controllers
                             continue;
                         }
 
-                        // Converter datas (formato"MM/dd/yyyy", "M/dd/yyyy", "MM/d/yyyy" ou "M/d/yyyy")
-                        string[] dateFormats = { "MM/dd/yyyy", "M/dd/yyyy", "MM/d/yyyy", "M/d/yyyy" };
+                        //string[] dateFormats = { "MM/dd/yyyy", "M/dd/yyyy", "MM/d/yyyy", "M/d/yyyy" };
 
                         DateTime emissao;
-                        if (DateTime.TryParseExact(worksheet.Cells[row, 3].Text, dateFormats, CultureInfo.InvariantCulture, DateTimeStyles.None, out emissao))
+                        //if (DateTime.TryParseExact(worksheet.Cells[row, 3].Text, dateFormats, CultureInfo.InvariantCulture, DateTimeStyles.None, out emissao))
+                        if (DateTime.TryParse(worksheet.Cells[row, 3].Text, out emissao))
                         {
                             debito.Emissao = emissao;
                         }
@@ -105,7 +106,8 @@ namespace DesafioImportaExcel.Controllers
                         }
 
                         DateTime vencimento;
-                        if (DateTime.TryParseExact(worksheet.Cells[row, 4].Text, dateFormats, CultureInfo.InvariantCulture, DateTimeStyles.None, out vencimento))
+                        //if (DateTime.TryParseExact(worksheet.Cells[row, 4].Text, dateFormats, CultureInfo.InvariantCulture, DateTimeStyles.None, out vencimento))
+                        if (DateTime.TryParse(worksheet.Cells[row, 4].Text, out vencimento))
                         {
                             debito.Vencimento = vencimento;
                         }
@@ -139,7 +141,8 @@ namespace DesafioImportaExcel.Controllers
                         }
 
                         DateTime pagamento;
-                        if (DateTime.TryParseExact(worksheet.Cells[row, 8].Text, dateFormats, CultureInfo.InvariantCulture, DateTimeStyles.None, out pagamento))
+                        //if (DateTime.TryParseExact(worksheet.Cells[row, 8].Text, dateFormats, CultureInfo.InvariantCulture, DateTimeStyles.None, out pagamento))
+                        if (DateTime.TryParse(worksheet.Cells[row, 8].Text, out pagamento))
                         {
                             debito.Pagamento = pagamento;
                         }
@@ -264,7 +267,7 @@ namespace DesafioImportaExcel.Controllers
         public static void InsertDataIntoDatabase<T>(List<T> data, int worksheetIndex)
 
         {
-            string connectionString = "";
+            string connectionString = "Server = Gemini\\SQL2019; Database = Desafio_Planilha; User Id = sa; Password = cdssql;";
 
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
@@ -278,9 +281,15 @@ namespace DesafioImportaExcel.Controllers
                         TabelaCliente tabelaCliente = new TabelaCliente(connectionString);
                         tabelaCliente.CriarTabelaSeNaoExistir();
                         {
-                            insertQuery = @"
-                        INSERT INTO Clientes (ID, Nome, Cidade, UF, CEP, CPF)
-                        VALUES (@ID, @Nome, @Cidade, @UF, @CEP, @CPF)";
+                            // Habilitar a inserção explícita de valores na coluna de identidade
+                            insertQuery = "SET IDENTITY_INSERT Cliente ON; ";
+
+                            insertQuery += @"
+                            INSERT INTO Cliente (ID, Nome, Cidade, UF, CEP, CPF)
+                            VALUES (@ID, @Nome, @Cidade, @UF, @CEP, @CPF);";
+
+                            // Desabilitar a inserção explícita de valores na coluna de identidade
+                            insertQuery += "SET IDENTITY_INSERT Cliente OFF;";
                         }
 
                         using (SqlCommand command = new SqlCommand(insertQuery, connection))
@@ -300,12 +309,16 @@ namespace DesafioImportaExcel.Controllers
                         TabelaDebitos tabelaDebitos = new TabelaDebitos(connectionString);
                         tabelaDebitos.CriarTabelaSeNaoExistir();
                         insertQuery = @"
-                        INSERT INTO Debitos (NumeroFatura, Cliente, Emissao, Vencimento, Valor, Juros, Descontos, Pagamento, ValorPago)
-                        VALUES (@NumeroFatura, @Cliente, @Emissao, @Vencimento, @Valor, @Juros, @Descontos, @Pagamento, @ValorPago)";
+                        INSERT INTO Debitos (Fatura, Cliente, Emissao, Vencimento, Valor, Juros, Descontos, Pagamento, ValorPago)
+                        VALUES (@Fatura, @Cliente, @Emissao, @Vencimento, @Valor, @Juros, @Descontos, @Pagamento, @ValorPago)";
+
+                        debitos.Emissao = Utilitarios.ConverteParaDataValida(debitos.Emissao.ToString());
+                        debitos.Vencimento = Utilitarios.ConverteParaDataValida(debitos.Vencimento.ToString());
+                        debitos.Pagamento = Utilitarios.ConverteParaDataValida(debitos.Pagamento.ToString());
 
                         using (SqlCommand command = new SqlCommand(insertQuery, connection))
                         {
-                            command.Parameters.AddWithValue("@NumeroFatura", debitos.Fatura);
+                            command.Parameters.AddWithValue("@Fatura", debitos.Fatura);
                             command.Parameters.AddWithValue("@Cliente", debitos.Cliente);
                             command.Parameters.AddWithValue("@Emissao", debitos.Emissao);
                             command.Parameters.AddWithValue("@Vencimento", debitos.Vencimento);
@@ -362,8 +375,8 @@ namespace DesafioImportaExcel.Controllers
         //                TabelaDebitos debitos = new TabelaDebitos(connectionString);
         //                debitos.CriarTabelaSeNaoExistir();
         //                insertQuery = @"
-        //                INSERT INTO Debitos (NumeroFatura, Cliente, Emissao, Vencimento, Valor, Juros, Descontos, Pagamento, ValorPago)
-        //                VALUES (@NumeroFatura, @Cliente, @Emissao, @Vencimento, @Valor, @Juros, @Descontos, @Pagamento, @ValorPago)";
+        //                INSERT INTO Debitos (Fatura, Cliente, Emissao, Vencimento, Valor, Juros, Descontos, Pagamento, ValorPago)
+        //                VALUES (@Fatura, @Cliente, @Emissao, @Vencimento, @Valor, @Juros, @Descontos, @Pagamento, @ValorPago)";
 
         //                using (SqlCommand command = new SqlCommand(insertQuery, connection))
         //                {
@@ -409,8 +422,8 @@ namespace DesafioImportaExcel.Controllers
         //            else if (worksheetIndex == 1 && data is Debitos)
         //            {
         //                insertQuery = @"
-        //        INSERT INTO Debitos (NumeroFatura, Cliente, Emissao, Vencimento, Valor, Juros, Descontos, Pagamento, ValorPago)
-        //        VALUES (@NumeroFatura, @Cliente, @Emissao, @Vencimento, @Valor, @Juros, @Descontos, @Pagamento, @ValorPago)";
+        //        INSERT INTO Debitos (Fatura, Cliente, Emissao, Vencimento, Valor, Juros, Descontos, Pagamento, ValorPago)
+        //        VALUES (@Fatura, @Cliente, @Emissao, @Vencimento, @Valor, @Juros, @Descontos, @Pagamento, @ValorPago)";
         //            }
 
         //            using (SqlCommand command = new SqlCommand(insertQuery, connection))
@@ -426,7 +439,7 @@ namespace DesafioImportaExcel.Controllers
         //                }
         //                else if (data is Debitos debito)
         //                {
-        //                    command.Parameters.AddWithValue("@NumeroFatura", debito.Fatura);
+        //                    command.Parameters.AddWithValue("@Fatura", debito.Fatura);
         //                    command.Parameters.AddWithValue("@Cliente", debito.Cliente);
         //                    command.Parameters.AddWithValue("@Emissao", debito.Emissao);
         //                    command.Parameters.AddWithValue("@Vencimento", debito.Vencimento);
@@ -465,11 +478,11 @@ namespace DesafioImportaExcel.Controllers
 
                     foreach (DataRow row in dataTable.Rows)
                     {
-                        string numeroFatura = row["Fatura"].ToString();
+                        string fatura = row["Fatura"].ToString();
                         int cliente = int.Parse(row["Cliente"].ToString());
 
                         // Verificar se já existe uma linha com a mesma Fatura e Cliente
-                        if (IsDuplicateFaturaCliente(connection, numeroFatura, cliente))
+                        if (IsDuplicateFaturaCliente(connection, fatura, cliente))
                         {
                             DialogResult result = MessageBox.Show("Já existe uma linha com a mesma Fatura e Cliente. Deseja substituir?", "Aviso", MessageBoxButtons.YesNoCancel);
 
@@ -497,12 +510,12 @@ namespace DesafioImportaExcel.Controllers
             }
         }
 
-        private bool IsDuplicateFaturaCliente(SqlConnection connection, string numeroFatura, int cliente)
+        private bool IsDuplicateFaturaCliente(SqlConnection connection, string fatura, int cliente)
         {
-            string query = "SELECT COUNT(*) FROM SuaTabela WHERE NumeroFatura = @NumeroFatura AND Cliente = @Cliente";
+            string query = "SELECT COUNT(*) FROM SuaTabela WHERE Fatura = @Fatura AND Cliente = @Cliente";
             using (SqlCommand command = new SqlCommand(query, connection))
             {
-                command.Parameters.AddWithValue("@NumeroFatura", numeroFatura);
+                command.Parameters.AddWithValue("@Fatura", fatura);
                 command.Parameters.AddWithValue("@Cliente", cliente);
                 int count = (int)command.ExecuteScalar();
 

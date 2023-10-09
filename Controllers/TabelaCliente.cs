@@ -29,12 +29,12 @@ namespace DesafioImportaExcel.Controllers
                         BEGIN
                             CREATE TABLE Cliente
                             (
-                                ID INT PRIMARY KEY IDENTITY(1,1),
+                                ID INT IDENTITY(1,1) NOT NULL,
                                 Nome NVARCHAR(255),
                                 Cidade NVARCHAR(255),
                                 UF NVARCHAR(2),
-                                CEP NVARCHAR(8),
-                                CPF NVARCHAR(11)
+                                CEP NVARCHAR(9),
+                                CPF NVARCHAR(14)
                             )
                         END";
 

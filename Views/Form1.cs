@@ -13,7 +13,7 @@ namespace DesafioImportaExcel
 {
     public partial class Form1 : Form
     {
-        private bool planilhaLida = false; // Indica se a planilha foi lida com sucesso
+        private bool planilhaLida = false;
         int? worksheetIndex = null;
 
         public Form1()
@@ -47,7 +47,7 @@ namespace DesafioImportaExcel
                         if (planilhaSelecionadaIndex != null)
                         {
                             string planilhaSelecionadaNome = planilhas[planilhaSelecionadaIndex.Value];
-                            List<dynamic> dados = ImportacaoPlanilhaExcel.ReadDataFromExcel(excelFilePath, (int)planilhaSelecionadaIndex);
+                            List<dynamic>? dados = ImportacaoPlanilhaExcel.ReadDataFromExcel(excelFilePath, (int)planilhaSelecionadaIndex);
                             dataGridView1.DataSource = dados;
                             
                             worksheetIndex = planilhaSelecionadaIndex;
@@ -120,34 +120,6 @@ namespace DesafioImportaExcel
                         MessageBox.Show("Ocorreu um erro ao inserir os dados: " + ex.Message);
                     }
                 }
-
-
-                /*
-                    string connectionString = @"Server = x\x; Database = xr; User Id = x; Password = x;";
-
-                    try
-                    {
-                        TabelaDebitos debitos = new TabelaDebitos(connectionString);
-                        ImportacaoPlanilhaExcel importaDados = new ImportacaoPlanilhaExcel(connectionString);
-
-                        debitos.CriarTabelaSeNaoExistir();
-                        bool success = importaDados.InsertDataIntoDatabase(dataTable);
-
-                        if (success)
-                        {
-                            MessageBox.Show("Dados inseridos com sucesso no banco de dados!");
-                        }
-                        else
-                        {
-                            MessageBox.Show("Falha ao inserir dados no banco de dados.");
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        MessageBox.Show("Ocorreu um erro: " + ex.Message);
-                    }
-                }
-                */
             }
 
         }

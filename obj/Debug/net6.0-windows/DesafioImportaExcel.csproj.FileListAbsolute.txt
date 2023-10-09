@@ -116,3 +116,4 @@ C:\Users\mathe\OneDrive\Documents\Codes\CSharp\DesafioImportaExcel\obj\Debug\net
 C:\Users\mathe\OneDrive\Documents\Codes\CSharp\DesafioImportaExcel\obj\Debug\net6.0-windows\DesafioImportaExcel.genruntimeconfig.cache
 C:\Users\mathe\OneDrive\Documents\Codes\CSharp\DesafioImportaExcel\obj\Debug\net6.0-windows\ref\DesafioImportaExcel.dll
 C:\Users\mondaini\Documents\Codes\csharp\DesafioImportaExcel\obj\Debug\net6.0-windows\DesafioImportaExcel.EscolhaPlanilhaForm.resources
+C:\Users\matheus.alegre\Documents\CSharp\DesafioImportaExcel\obj\Debug\net6.0-windows\DesafioImportaExcel.EscolhaPlanilhaForm.resources
