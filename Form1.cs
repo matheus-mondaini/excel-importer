@@ -11,9 +11,8 @@ namespace DesafioImportaExcel
 {
     public partial class Form1 : Form
     {
-        private List<Debitos> debitosList; // Para armazenar os dados da planilha
         private bool planilhaLida = false; // Indica se a planilha foi lida com sucesso
-
+        int? worksheetIndex = null;
 
         public Form1()
         {
@@ -48,9 +47,10 @@ namespace DesafioImportaExcel
                             string planilhaSelecionadaNome = planilhas[planilhaSelecionadaIndex.Value];
                             List<dynamic> dados = ImportacaoPlanilhaExcel.ReadDataFromExcel(excelFilePath, (int)planilhaSelecionadaIndex);
                             dataGridView1.DataSource = dados;
+                            
+                            worksheetIndex = planilhaSelecionadaIndex;
                             planilhaLida = true;
                             btnInserirNoBanco.Enabled = true;
-
                         }
                         else
                         {
@@ -99,7 +99,7 @@ namespace DesafioImportaExcel
                         }
                     }
 
-                    ImportacaoPlanilhaExcel.InsertDataIntoDatabase(rows);
+                    ImportacaoPlanilhaExcel.InsertDataIntoDatabase(rows, (int)worksheetIndex);
                     MessageBox.Show("Dados inseridos com sucesso no banco de dados!");
                 }
                 catch (Exception ex)

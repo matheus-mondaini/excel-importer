@@ -260,7 +260,7 @@ namespace DesafioImportaExcel
         }
 
 
-        public static void InsertDataIntoDatabase(List<DataRow> rows)
+        public static void InsertDataIntoDatabase(List<DataRow> rows, int worksheetIndex)
         {
             string connectionString = "";
 
@@ -270,114 +270,196 @@ namespace DesafioImportaExcel
 
                 foreach (DataRow row in rows)
                 {
-                    string insertQuery = @"
-                    INSERT INTO Debitos (NumeroFatura, Cliente, Emissao, Vencimento, Valor, Juros, Descontos, Pagamento, ValorPago)
-                    VALUES (@NumeroFatura, @Cliente, @Emissao, @Vencimento, @Valor, @Juros, @Descontos, @Pagamento, @ValorPago)";
-
-                    using (SqlCommand command = new SqlCommand(insertQuery, connection))
+                    string insertQuery = "";
+                    if (worksheetIndex == 0)
                     {
-                        command.Parameters.AddWithValue("@Fatura", row["Fatura"]);
-                        command.Parameters.AddWithValue("@Cliente", row["Cliente"]);
-                        command.Parameters.AddWithValue("@Emissao", row["Emissao"]);
-                        command.Parameters.AddWithValue("@Vencimento", row["Vencimento"]);
-                        command.Parameters.AddWithValue("@Valor", row["Valor"]);
-                        command.Parameters.AddWithValue("@Juros", row["Juros"]);
-                        command.Parameters.AddWithValue("@Descontos", row["Descontos"]);
-                        command.Parameters.AddWithValue("@Pagamento", row["Pagamento"]);
-                        command.Parameters.AddWithValue("@ValorPago", row["ValorPago"]);
+                        {
+                            insertQuery = @"
+                            INSERT INTO Clientes (ID, Nome, Cidade, UF, CEP, CPF)
+                            VALUES (@ID, @Nome, @Cidade, @UF, @CEP, @CPF)";
+                        }
 
-                        command.ExecuteNonQuery();
+                        using (SqlCommand command = new SqlCommand(insertQuery, connection))
+                        {
+                            command.Parameters.AddWithValue("@ID", row["ID"]);
+                            command.Parameters.AddWithValue("@Nome", row["Nome"]);
+                            command.Parameters.AddWithValue("@Cidade", row["Cidade"]);
+                            command.Parameters.AddWithValue("@UF", row["UF"]);
+                            command.Parameters.AddWithValue("@CEP", row["CEP"]);
+                            command.Parameters.AddWithValue("@CPF", row["CPF"]);
+                        }
+                    }
+                    else if (worksheetIndex == 1)
+                    {
+                        insertQuery = @"
+                        INSERT INTO Debitos (NumeroFatura, Cliente, Emissao, Vencimento, Valor, Juros, Descontos, Pagamento, ValorPago)
+                        VALUES (@NumeroFatura, @Cliente, @Emissao, @Vencimento, @Valor, @Juros, @Descontos, @Pagamento, @ValorPago)";
+
+                        using (SqlCommand command = new SqlCommand(insertQuery, connection))
+                        {
+                            command.Parameters.AddWithValue("@Fatura", row["Fatura"]);
+                            command.Parameters.AddWithValue("@Cliente", row["Cliente"]);
+                            command.Parameters.AddWithValue("@Emissao", row["Emissao"]);
+                            command.Parameters.AddWithValue("@Vencimento", row["Vencimento"]);
+                            command.Parameters.AddWithValue("@Valor", row["Valor"]);
+                            command.Parameters.AddWithValue("@Juros", row["Juros"]);
+                            command.Parameters.AddWithValue("@Descontos", row["Descontos"]);
+                            command.Parameters.AddWithValue("@Pagamento", row["Pagamento"]);
+                            command.Parameters.AddWithValue("@ValorPago", row["ValorPago"]);
+
+                            command.ExecuteNonQuery();
+                        }
+                    }
+                    else
+                    {
+                        MessageBox.Show("Tipo de objeto não suportado ou índice de planilha inválido.");
                     }
                 }
             }
         }
- 
-    /*
-    private string _connectionString;
 
-    public ImportacaoPlanilhaExcel(string connectionString)
-    {
-        _connectionString = connectionString;
-    }
+        //public static void InsertDataIntoDatabase(List<object> dataList, int worksheetIndex)
+        //{
+        //    string connectionString = "";
 
-    public DataTable ReadDataFromExcel(string excelFilePath)
-    {
+        //    using (SqlConnection connection = new SqlConnection(connectionString))
+        //    {
+        //        connection.Open();
 
-    public bool InsertDataIntoDatabase(DataTable dataTable)
-    {
-        try
+        //        foreach (var data in dataList)
+        //        {
+        //            string insertQuery = "";
+
+        //            if (worksheetIndex == 0 && data is Cliente)
+        //            {
+        //                insertQuery = @"
+        //        INSERT INTO Clientes (ID, Nome, Cidade, UF, CEP, CPF)
+        //        VALUES (@ID, @Nome, @Cidade, @UF, @CEP, @CPF)";
+        //            }
+        //            else if (worksheetIndex == 1 && data is Debitos)
+        //            {
+        //                insertQuery = @"
+        //        INSERT INTO Debitos (NumeroFatura, Cliente, Emissao, Vencimento, Valor, Juros, Descontos, Pagamento, ValorPago)
+        //        VALUES (@NumeroFatura, @Cliente, @Emissao, @Vencimento, @Valor, @Juros, @Descontos, @Pagamento, @ValorPago)";
+        //            }
+
+        //            using (SqlCommand command = new SqlCommand(insertQuery, connection))
+        //            {
+        //                if (data is Cliente cliente)
+        //                {
+        //                    command.Parameters.AddWithValue("@ID", cliente.ID);
+        //                    command.Parameters.AddWithValue("@Nome", cliente.Nome);
+        //                    command.Parameters.AddWithValue("@Cidade", cliente.Cidade);
+        //                    command.Parameters.AddWithValue("@UF", cliente.UF);
+        //                    command.Parameters.AddWithValue("@CEP", cliente.CEP);
+        //                    command.Parameters.AddWithValue("@CPF", cliente.CPF);
+        //                }
+        //                else if (data is Debitos debito)
+        //                {
+        //                    command.Parameters.AddWithValue("@NumeroFatura", debito.Fatura);
+        //                    command.Parameters.AddWithValue("@Cliente", debito.Cliente);
+        //                    command.Parameters.AddWithValue("@Emissao", debito.Emissao);
+        //                    command.Parameters.AddWithValue("@Vencimento", debito.Vencimento);
+        //                    command.Parameters.AddWithValue("@Valor", debito.Valor);
+        //                    command.Parameters.AddWithValue("@Juros", debito.Juros);
+        //                    command.Parameters.AddWithValue("@Descontos", debito.Descontos);
+        //                    command.Parameters.AddWithValue("@Pagamento", debito.Pagamento);
+        //                    command.Parameters.AddWithValue("@ValorPago", debito.ValorPago);
+        //                }
+
+        //                command.ExecuteNonQuery();
+        //            }
+        //        }
+        //    }
+        //}
+
+
+        /*
+        private string _connectionString;
+
+        public ImportacaoPlanilhaExcel(string connectionString)
         {
-            using (SqlConnection connection = new SqlConnection(_connectionString))
+            _connectionString = connectionString;
+        }
+
+        public DataTable ReadDataFromExcel(string excelFilePath)
+        {
+
+        public bool InsertDataIntoDatabase(DataTable dataTable)
+        {
+            try
             {
-                connection.Open();
-
-                foreach (DataRow row in dataTable.Rows)
+                using (SqlConnection connection = new SqlConnection(_connectionString))
                 {
-                    string numeroFatura = row["Fatura"].ToString();
-                    int cliente = int.Parse(row["Cliente"].ToString());
+                    connection.Open();
 
-                    // Verificar se já existe uma linha com a mesma Fatura e Cliente
-                    if (IsDuplicateFaturaCliente(connection, numeroFatura, cliente))
+                    foreach (DataRow row in dataTable.Rows)
                     {
-                        DialogResult result = MessageBox.Show("Já existe uma linha com a mesma Fatura e Cliente. Deseja substituir?", "Aviso", MessageBoxButtons.YesNoCancel);
+                        string numeroFatura = row["Fatura"].ToString();
+                        int cliente = int.Parse(row["Cliente"].ToString());
 
-                        if (result == DialogResult.Cancel)
+                        // Verificar se já existe uma linha com a mesma Fatura e Cliente
+                        if (IsDuplicateFaturaCliente(connection, numeroFatura, cliente))
                         {
-                            return false; // Cancelar a ação
+                            DialogResult result = MessageBox.Show("Já existe uma linha com a mesma Fatura e Cliente. Deseja substituir?", "Aviso", MessageBoxButtons.YesNoCancel);
+
+                            if (result == DialogResult.Cancel)
+                            {
+                                return false; // Cancelar a ação
+                            }
+                            else if (result == DialogResult.No)
+                            {
+                                continue; // Ignorar e continuar com a próxima linha
+                            }
+                            // Se result for DialogResult.Yes, continua para a inserção
                         }
-                        else if (result == DialogResult.No)
-                        {
-                            continue; // Ignorar e continuar com a próxima linha
-                        }
-                        // Se result for DialogResult.Yes, continua para a inserção
+
+                        // Inserir os dados no banco de dados usando Dapper
+                        InsertData(connection, row);
                     }
-
-                    // Inserir os dados no banco de dados usando Dapper
-                    InsertData(connection, row);
                 }
+
+                return true;
             }
-
-            return true;
+            catch (Exception)
+            {
+                return false;
+            }
         }
-        catch (Exception)
+
+        private bool IsDuplicateFaturaCliente(SqlConnection connection, string numeroFatura, int cliente)
         {
-            return false;
-        }
-    }
+            string query = "SELECT COUNT(*) FROM SuaTabela WHERE NumeroFatura = @NumeroFatura AND Cliente = @Cliente";
+            using (SqlCommand command = new SqlCommand(query, connection))
+            {
+                command.Parameters.AddWithValue("@NumeroFatura", numeroFatura);
+                command.Parameters.AddWithValue("@Cliente", cliente);
+                int count = (int)command.ExecuteScalar();
 
-    private bool IsDuplicateFaturaCliente(SqlConnection connection, string numeroFatura, int cliente)
-    {
-        string query = "SELECT COUNT(*) FROM SuaTabela WHERE NumeroFatura = @NumeroFatura AND Cliente = @Cliente";
-        using (SqlCommand command = new SqlCommand(query, connection))
+                return count > 0;
+            }
+        }
+
+        private void InsertData(SqlConnection connection, DataRow row)
         {
-            command.Parameters.AddWithValue("@NumeroFatura", numeroFatura);
-            command.Parameters.AddWithValue("@Cliente", cliente);
-            int count = (int)command.ExecuteScalar();
+            string insertQuery = "INSERT INTO SuaTabela (Fatura, Cliente, Emissao, Vencimento, Valor, Juros, Descontos, Pagamento, ValorPago) " +
+                                    "VALUES (@Fatura, @Cliente, @Emissao, @Vencimento, @Valor, @Juros, @Descontos, @Pagamento, @ValorPago)";
 
-            return count > 0;
+            using (SqlCommand command = new SqlCommand(insertQuery, connection))
+            {
+                command.Parameters.AddWithValue("@Fatura", row["Fatura"]);
+                command.Parameters.AddWithValue("@Cliente", int.Parse(row["Cliente"].ToString()));
+                command.Parameters.AddWithValue("@Emissao", DateTime.Parse(row["Emissao"].ToString()));
+                command.Parameters.AddWithValue("@Vencimento", DateTime.Parse(row["Vencimento"].ToString()));
+                command.Parameters.AddWithValue("@Valor", decimal.Parse(row["Valor"].ToString()));
+                command.Parameters.AddWithValue("@Juros", decimal.Parse(row["Juros"].ToString()));
+                command.Parameters.AddWithValue("@Descontos", decimal.Parse(row["Descontos"].ToString()));
+                command.Parameters.AddWithValue("@Pagamento", DateTime.Parse(row["Pagamento"].ToString()));
+                command.Parameters.AddWithValue("@ValorPago", decimal.Parse(row["ValorPago"].ToString()));
+
+                command.ExecuteNonQuery();
+            }
         }
-    }
-
-    private void InsertData(SqlConnection connection, DataRow row)
-    {
-        string insertQuery = "INSERT INTO SuaTabela (Fatura, Cliente, Emissao, Vencimento, Valor, Juros, Descontos, Pagamento, ValorPago) " +
-                                "VALUES (@Fatura, @Cliente, @Emissao, @Vencimento, @Valor, @Juros, @Descontos, @Pagamento, @ValorPago)";
-
-        using (SqlCommand command = new SqlCommand(insertQuery, connection))
-        {
-            command.Parameters.AddWithValue("@Fatura", row["Fatura"]);
-            command.Parameters.AddWithValue("@Cliente", int.Parse(row["Cliente"].ToString()));
-            command.Parameters.AddWithValue("@Emissao", DateTime.Parse(row["Emissao"].ToString()));
-            command.Parameters.AddWithValue("@Vencimento", DateTime.Parse(row["Vencimento"].ToString()));
-            command.Parameters.AddWithValue("@Valor", decimal.Parse(row["Valor"].ToString()));
-            command.Parameters.AddWithValue("@Juros", decimal.Parse(row["Juros"].ToString()));
-            command.Parameters.AddWithValue("@Descontos", decimal.Parse(row["Descontos"].ToString()));
-            command.Parameters.AddWithValue("@Pagamento", DateTime.Parse(row["Pagamento"].ToString()));
-            command.Parameters.AddWithValue("@ValorPago", decimal.Parse(row["ValorPago"].ToString()));
-
-            command.ExecuteNonQuery();
-        }
-    }
-    */
+        */
     }
 }
