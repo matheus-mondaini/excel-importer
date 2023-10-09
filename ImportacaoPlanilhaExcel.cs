@@ -273,6 +273,8 @@ namespace DesafioImportaExcel
                     string insertQuery = "";
                     if (worksheetIndex == 0)
                     {
+                        TabelaCliente cliente = new TabelaCliente(connectionString);
+                        cliente.CriarTabelaSeNaoExistir();
                         {
                             insertQuery = @"
                             INSERT INTO Clientes (ID, Nome, Cidade, UF, CEP, CPF)
@@ -291,6 +293,8 @@ namespace DesafioImportaExcel
                     }
                     else if (worksheetIndex == 1)
                     {
+                        TabelaDebitos debitos = new TabelaDebitos(connectionString);
+                        debitos.CriarTabelaSeNaoExistir();
                         insertQuery = @"
                         INSERT INTO Debitos (NumeroFatura, Cliente, Emissao, Vencimento, Valor, Juros, Descontos, Pagamento, ValorPago)
                         VALUES (@NumeroFatura, @Cliente, @Emissao, @Vencimento, @Valor, @Juros, @Descontos, @Pagamento, @ValorPago)";
