@@ -202,7 +202,7 @@ namespace DesafioImportaExcel.Controllers
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Erro ao ler a Connection String do arquivo: {ex.Message}");
+                MessageBox.Show($"Erro ao ler a Connection String do arquivo: {ex.Message}");
                 return string.Empty;
             }
         }
@@ -210,7 +210,7 @@ namespace DesafioImportaExcel.Controllers
         public static void InsertDataIntoDatabase<T>(List<T> data, int worksheetIndex)
 
         {
-            string connectionString = ReadConnectionStringFromFile("connectionString.txt"); //Removido antes do push por privacidade
+            string connectionString = ReadConnectionStringFromFile("connectionString.txt");
 
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
