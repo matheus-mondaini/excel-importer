@@ -5,7 +5,7 @@ Excel Importer is a versatile C# Windows Forms tool that simplifies data import 
 
 Before you begin, make sure you meet the following requirements:
 
-- Be connected to a SQL Server, which contains a table for tests.
+- Be connected to a SQL Server, which contains a database called `Desafio_Planilha` for importing.
 - Be an authorized user in this domain.
 
 ## How to Use
@@ -18,11 +18,13 @@ Follow these steps to import data from the spreadsheet into the database:
    git clone https://github.com/your-username/your-project.git
    ```
 
-2. Run the `DesafioImportaExcel.exe` shortcut, located in the main project folder, and follow the instructions to select the spreadsheet and the type of data to import (Cliente or Debitos).
+2. Set the SQL Connection informations in the connectionString.txt file, replacing the respective fields with your available SQL connection, following the [Requirements].
 
-3. The application will import the data from the spreadsheet into the database on the server, if desired.
+3. Run the `DesafioImportaExcel.exe` shortcut, located in the main project folder, and follow the instructions to select the spreadsheet and the type of data to import (Cliente or Debitos).
 
-4. The data will be available in the database for queries and analysis.
+4. The application will import the data from the spreadsheet into a database on the server, if desired.
+
+5. The data will be available in the database for queries and analysis.
 
 - Note: This project is currently for internal use and requires specific SQL Server configuration. Ensure that your environment meets these requirements before proceeding.
 

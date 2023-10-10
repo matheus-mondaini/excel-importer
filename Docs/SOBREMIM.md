@@ -6,7 +6,7 @@ O Excel Importer é uma versátil ferramenta em C# com interface gráfica em Win
 
 Antes de começar, certifique-se de que atende aos seguintes requisitos:
 
-- Estar conectado a um servidor SQL Server, que contenha uma tabela teste.
+- Estar conectado a um servidor SQL Server, que contenha um banco de dados chamado `Desafio_Planilha` disponível.
 - Ser um usuário permitido neste domínio.
 
 ## Como Usar
@@ -18,11 +18,13 @@ Siga estas etapas para importar dados da planilha para o banco de dados:
    ```bash
    git clone https://github.com/seu-usuario/seu-projeto.git
 
-2. Execute o atalho do `DesafioImportaExcel.exe`, que se encontra logo na pasta principal do projeto, e siga as instruções para selecionar a planilha e o tipo de dados a serem importados (Cliente ou Debitos).
+2. Defina as informações de conexão SQL no arquivo connectionString.txt, substituindo os campos respectivos pelas informações da sua conexão SQL disponível, cumprindo os [Requisitos].
 
-3. O aplicativo importará os dados da planilha para o banco de dados no servidor, caso assim desejar.
+3. Execute o atalho do `DesafioImportaExcel.exe`, que se encontra logo na pasta principal do projeto, e siga as instruções para selecionar a planilha e o tipo de dados a serem importados (Cliente ou Debitos).
 
-4. Os dados ficarão disponíveis no banco de dados para consultas e análises.
+4. O aplicativo importará os dados da planilha para o banco de dados no servidor, caso assim desejar.
+
+5. Os dados ficarão disponíveis no banco de dados para consultas e análises.
 
 - Observação: Este projeto é atualmente para uso interno e requer uma configuração específica do servidor SQL Server. Certifique-se de que seu ambiente atenda a esses requisitos antes de prosseguir.
 
