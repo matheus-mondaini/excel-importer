@@ -5,7 +5,7 @@ Excel Importer is a versatile C# Windows Forms tool that simplifies data import 
 
 Before you begin, make sure you meet the following requirements:
 
-- Be connected to a SQL Server with the name `Gemini\SQL2019`, which contains the `Desafio_Planilha` table.
+- Be connected to a SQL Server, which contains a table for tests.
 - Be an authorized user in this domain.
 
 ## How to Use
@@ -20,7 +20,7 @@ Follow these steps to import data from the spreadsheet into the database:
 
 2. Run the `DesafioImportaExcel.exe` shortcut, located in the main project folder, and follow the instructions to select the spreadsheet and the type of data to import (Cliente or Debitos).
 
-3. The application will import the data from the spreadsheet into the database on the Gemini\SQL2019 server, if desired.
+3. The application will import the data from the spreadsheet into the database on the server, if desired.
 
 4. The data will be available in the database for queries and analysis.
 

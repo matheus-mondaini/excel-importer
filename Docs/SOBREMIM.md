@@ -6,7 +6,7 @@ O Excel Importer é uma versátil ferramenta em C# com interface gráfica em Win
 
 Antes de começar, certifique-se de que atende aos seguintes requisitos:
 
-- Estar conectado a um servidor SQL Server com o nome `Gemini\SQL2019`, que contenha a tabela `Desafio_Planilha`.
+- Estar conectado a um servidor SQL Server, que contenha uma tabela teste.
 - Ser um usuário permitido neste domínio.
 
 ## Como Usar
@@ -20,7 +20,7 @@ Siga estas etapas para importar dados da planilha para o banco de dados:
 
 2. Execute o atalho do `DesafioImportaExcel.exe`, que se encontra logo na pasta principal do projeto, e siga as instruções para selecionar a planilha e o tipo de dados a serem importados (Cliente ou Debitos).
 
-3. O aplicativo importará os dados da planilha para o banco de dados no servidor Gemini\SQL2019, caso assim desejar.
+3. O aplicativo importará os dados da planilha para o banco de dados no servidor, caso assim desejar.
 
 4. Os dados ficarão disponíveis no banco de dados para consultas e análises.
 
