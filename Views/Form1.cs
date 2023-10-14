@@ -47,7 +47,7 @@ namespace DesafioImportaExcel
                             string planilhaSelecionadaNome = planilhas[planilhaSelecionadaIndex.Value];
                             List<dynamic>? dados = ImportacaoPlanilhaExcel.ReadDataFromExcel(excelFilePath, (int)planilhaSelecionadaIndex);
                             dataGridView1.DataSource = dados;
-                            
+
                             worksheetIndex = planilhaSelecionadaIndex;
                             planilhaLida = true;
                             btnInserirNoBanco.Enabled = true;
@@ -116,5 +116,9 @@ namespace DesafioImportaExcel
 
         }
 
+        private void btnExportar_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }

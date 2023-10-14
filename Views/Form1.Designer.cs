@@ -28,63 +28,81 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.btnLerPlanilha = new System.Windows.Forms.Button();
-            this.dataGridView1 = new System.Windows.Forms.DataGridView();
-            this.btnInserirNoBanco = new System.Windows.Forms.Button();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
-            this.SuspendLayout();
+            btnLerPlanilha = new Button();
+            dataGridView1 = new DataGridView();
+            btnInserirNoBanco = new Button();
+            btnExportar = new Button();
+            ((System.ComponentModel.ISupportInitialize)dataGridView1).BeginInit();
+            SuspendLayout();
             // 
             // btnLerPlanilha
             // 
-            this.btnLerPlanilha.BackColor = System.Drawing.SystemColors.ButtonHighlight;
-            this.btnLerPlanilha.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.btnLerPlanilha.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.btnLerPlanilha.Location = new System.Drawing.Point(123, 22);
-            this.btnLerPlanilha.Name = "btnLerPlanilha";
-            this.btnLerPlanilha.Size = new System.Drawing.Size(109, 44);
-            this.btnLerPlanilha.TabIndex = 0;
-            this.btnLerPlanilha.Text = "Ler Planilha";
-            this.btnLerPlanilha.UseVisualStyleBackColor = false;
-            this.btnLerPlanilha.Click += new System.EventHandler(this.btnLerPlanilha_Click);
+            btnLerPlanilha.BackColor = SystemColors.ButtonHighlight;
+            btnLerPlanilha.Font = new Font("Segoe UI", 10F, FontStyle.Bold, GraphicsUnit.Point);
+            btnLerPlanilha.ForeColor = SystemColors.ControlText;
+            btnLerPlanilha.Location = new Point(14, 31);
+            btnLerPlanilha.Margin = new Padding(3, 4, 3, 4);
+            btnLerPlanilha.Name = "btnLerPlanilha";
+            btnLerPlanilha.Size = new Size(125, 59);
+            btnLerPlanilha.TabIndex = 0;
+            btnLerPlanilha.Text = "Ler Planilha";
+            btnLerPlanilha.UseVisualStyleBackColor = false;
+            btnLerPlanilha.Click += btnLerPlanilha_Click;
             // 
             // dataGridView1
             // 
-            this.dataGridView1.BackgroundColor = System.Drawing.SystemColors.ButtonHighlight;
-            this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridView1.Location = new System.Drawing.Point(12, 90);
-            this.dataGridView1.Name = "dataGridView1";
-            this.dataGridView1.RowTemplate.Height = 25;
-            this.dataGridView1.Size = new System.Drawing.Size(643, 281);
-            this.dataGridView1.TabIndex = 1;
+            dataGridView1.BackgroundColor = SystemColors.ButtonHighlight;
+            dataGridView1.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dataGridView1.Location = new Point(14, 120);
+            dataGridView1.Margin = new Padding(3, 4, 3, 4);
+            dataGridView1.Name = "dataGridView1";
+            dataGridView1.RowHeadersWidth = 51;
+            dataGridView1.RowTemplate.Height = 25;
+            dataGridView1.Size = new Size(735, 375);
+            dataGridView1.TabIndex = 1;
             // 
             // btnInserirNoBanco
             // 
-            this.btnInserirNoBanco.BackColor = System.Drawing.SystemColors.ButtonHighlight;
-            this.btnInserirNoBanco.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.btnInserirNoBanco.Location = new System.Drawing.Point(378, 23);
-            this.btnInserirNoBanco.Name = "btnInserirNoBanco";
-            this.btnInserirNoBanco.Size = new System.Drawing.Size(146, 44);
-            this.btnInserirNoBanco.TabIndex = 2;
-            this.btnInserirNoBanco.Text = "Inserir No Banco";
-            this.btnInserirNoBanco.UseVisualStyleBackColor = false;
-            this.btnInserirNoBanco.Click += new System.EventHandler(this.btnInserirNoBanco_Click);
+            btnInserirNoBanco.BackColor = SystemColors.ButtonHighlight;
+            btnInserirNoBanco.Font = new Font("Segoe UI", 10F, FontStyle.Bold, GraphicsUnit.Point);
+            btnInserirNoBanco.Location = new Point(273, 31);
+            btnInserirNoBanco.Margin = new Padding(3, 4, 3, 4);
+            btnInserirNoBanco.Name = "btnInserirNoBanco";
+            btnInserirNoBanco.Size = new Size(167, 59);
+            btnInserirNoBanco.TabIndex = 2;
+            btnInserirNoBanco.Text = "Inserir No Banco";
+            btnInserirNoBanco.UseVisualStyleBackColor = false;
+            btnInserirNoBanco.Click += btnInserirNoBanco_Click;
+            // 
+            // btnExportar
+            // 
+            btnExportar.BackColor = SystemColors.ButtonHighlight;
+            btnExportar.Font = new Font("Segoe UI", 10F, FontStyle.Bold, GraphicsUnit.Point);
+            btnExportar.Location = new Point(555, 31);
+            btnExportar.Name = "btnExportar";
+            btnExportar.Size = new Size(152, 59);
+            btnExportar.TabIndex = 3;
+            btnExportar.Text = "Exportar Dados";
+            btnExportar.UseVisualStyleBackColor = false;
+            btnExportar.Click += btnExportar_Click;
             // 
             // Form1
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackColor = System.Drawing.SystemColors.ControlText;
-            this.ClientSize = new System.Drawing.Size(667, 383);
-            this.Controls.Add(this.btnInserirNoBanco);
-            this.Controls.Add(this.dataGridView1);
-            this.Controls.Add(this.btnLerPlanilha);
-            this.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.Name = "Form1";
-            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Desafio 1";
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
-            this.ResumeLayout(false);
-
+            AutoScaleDimensions = new SizeF(8F, 20F);
+            AutoScaleMode = AutoScaleMode.Font;
+            BackColor = SystemColors.ControlText;
+            ClientSize = new Size(762, 511);
+            Controls.Add(btnExportar);
+            Controls.Add(btnInserirNoBanco);
+            Controls.Add(dataGridView1);
+            Controls.Add(btnLerPlanilha);
+            ForeColor = SystemColors.ControlText;
+            Margin = new Padding(3, 4, 3, 4);
+            Name = "Form1";
+            StartPosition = FormStartPosition.CenterScreen;
+            Text = "Desafio 1";
+            ((System.ComponentModel.ISupportInitialize)dataGridView1).EndInit();
+            ResumeLayout(false);
         }
 
         #endregion
@@ -92,5 +110,6 @@
         private Button btnLerPlanilha;
         private DataGridView dataGridView1;
         private Button btnInserirNoBanco;
+        private Button btnExportar;
     }
 }

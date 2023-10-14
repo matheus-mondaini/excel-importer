@@ -255,14 +255,14 @@ namespace DesafioImportaExcel.Controllers
 
                         debitos.Emissao = Utilitarios.ConverteParaDataValida(debitos.Emissao.ToString());
                         debitos.Vencimento = Utilitarios.ConverteParaDataValida(debitos.Vencimento.ToString());
-                        debitos.Pagamento = Utilitarios.ConverteParaDataValida(debitos.Pagamento.ToString());
+                        if (debitos.Pagamento != null) Utilitarios.ConverteParaDataValida(debitos.Pagamento.ToString());
 
                         using (SqlCommand command = new SqlCommand(insertQuery, connection))
                         {
                             command.Parameters.AddWithValue("@Fatura", debitos.Fatura);
                             command.Parameters.AddWithValue("@Cliente", debitos.Cliente);
-                            command.Parameters.AddWithValue("@Emissao", debitos.Emissao);
-                            command.Parameters.AddWithValue("@Vencimento", debitos.Vencimento);
+                            command.Parameters.Add("@Emissao", SqlDbType.DateTime).Value = debitos.Emissao;
+                            command.Parameters.Add("@Vencimento", SqlDbType.DateTime).Value = debitos.Vencimento;
                             command.Parameters.AddWithValue("@Valor", debitos.Valor);
                             command.Parameters.AddWithValue("@Juros", debitos.Juros);
                             command.Parameters.AddWithValue("@Descontos", debitos.Descontos);
