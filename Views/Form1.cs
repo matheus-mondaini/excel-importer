@@ -118,6 +118,43 @@ namespace DesafioImportaExcel
 
         private void btnExportar_Click(object sender, EventArgs e)
         {
+            using (SaveFileDialog saveFileDialog = new SaveFileDialog())
+            {
+                saveFileDialog.Filter = "Arquivos CSV (*.csv)|*.csv";
+                saveFileDialog.Title = "Escolha o local e o nome do arquivo de exportação";
+                if (saveFileDialog.ShowDialog() == DialogResult.OK)
+                {
+                    DateTimePicker startDatePicker = new DateTimePicker();
+                    DateTimePicker endDatePicker = new DateTimePicker();
+                    startDatePicker.Format = DateTimePickerFormat.Short;
+                    endDatePicker.Format = DateTimePickerFormat.Short;
+                    startDatePicker.Location = new Point(10, 10);
+                    endDatePicker.Location = new Point(10, 40);
+                    Label startDateLabel = new Label();
+                    startDateLabel.Text = "Data de Início:";
+                    startDateLabel.Location = new Point(10, 10);
+                    Label endDateLabel = new Label();
+                    endDateLabel.Text = "Data de Término:";
+                    endDateLabel.Location = new Point(10, 40);
+                    Form dateRangeForm = new Form();
+                    dateRangeForm.Text = "Escolha o Período de Exportação";
+                    dateRangeForm.ClientSize = new Size(250, 130);
+                    Button exportButton = new Button();
+                    exportButton.Text = "Exportar";
+                    exportButton.Location = new Point(10, 70);
+                    exportButton.Click += (s, ev) =>
+                    {
+                        ExportacaoCSV.Exportar(saveFileDialog.FileName, startDatePicker.Value, endDatePicker.Value);
+                        dateRangeForm.Close();
+                    };
+                    dateRangeForm.Controls.Add(startDatePicker);
+                    dateRangeForm.Controls.Add(endDatePicker);
+                    dateRangeForm.Controls.Add(startDateLabel);
+                    dateRangeForm.Controls.Add(endDateLabel);
+                    dateRangeForm.Controls.Add(exportButton);
+                    dateRangeForm.ShowDialog();
+                }
+            }
 
         }
     }
