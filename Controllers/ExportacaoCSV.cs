@@ -35,7 +35,7 @@ namespace DesafioImportaExcel.Controllers
                     "FROM " +
                         "Debitos deb " +
                         "LEFT JOIN CLIENTE cli ON cli.ID = deb.Cliente" +
-                    "WHERE Emissao BETWEEN @StartDate AND @EndDate", connection))
+                    "WHERE deb.Emissao BETWEEN @StartDate AND @EndDate", connection))
                 {
                     command.Parameters.AddWithValue("@StartDate", dataInicio);
                     command.Parameters.AddWithValue("@EndDate", dataFim);
