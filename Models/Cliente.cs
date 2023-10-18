@@ -9,10 +9,10 @@ namespace DesafioImportaExcel.Models
     public class Cliente
     {
         public int ID { get; set; }
-        public string Nome { get; set; }
-        public string Cidade { get; set; }
-        public string UF { get; set; }
-        public string CEP { get; set; }
-        public string CPF { get; set; }
+        public string Nome { get; set; } = string.Empty;
+        public string Cidade { get; set; } = string.Empty;
+        public string UF { get; set; } = string.Empty;
+        public string CEP { get; set; } = string.Empty;
+        public string CPF { get; set; } = string.Empty;
     }
 }

@@ -1,0 +1,8 @@
+Desafio 2
+---------
+- Ler o banco de dados criado no desafio 1 e gerar um arquivo CSV, separado '|'
+- o arquivo deve conter:
+  'CLIENTE'|nome do cliente|cpf do cliente|cidade do cliente
+  'DEBITO'|fatura|emissao|vencimento|valor|valorpago|data pagamento
+- deve permitir escolher o periodo a ser gerado baseado na data de emissao da fatura
+

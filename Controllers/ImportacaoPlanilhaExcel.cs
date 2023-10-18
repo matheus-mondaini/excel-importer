@@ -137,9 +137,16 @@ namespace DesafioImportaExcel.Controllers
                         }
 
                         DateTime pagamento;
-                        if (DateTime.TryParse(worksheet.Cells[row, 8].Text, out pagamento))
+                        if (worksheet.Cells[row, 8].Text == null)
                         {
-                            debito.Pagamento = pagamento;
+                            debito.Pagamento = null;
+                        }
+                        else
+                        {
+                            if (DateTime.TryParse(worksheet.Cells[row, 8].Text, out pagamento))
+                            {
+                                debito.Pagamento = pagamento;
+                            }
                         }
 
                         decimal valorPago;
@@ -193,24 +200,10 @@ namespace DesafioImportaExcel.Controllers
             return clientesList;
         }
 
-        private static string ReadConnectionStringFromFile(string filePath)
-        {
-            try
-            {
-                string connectionString = File.ReadAllText(filePath);
-                return connectionString;
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Erro ao ler a Connection String do arquivo: {ex.Message}");
-                return string.Empty;
-            }
-        }
-
         public static void InsertDataIntoDatabase<T>(List<T> data, int worksheetIndex)
 
         {
-            string connectionString = ReadConnectionStringFromFile("connectionString.txt");
+            string connectionString = GerenciadorConexaoBancoDados.ReadConnectionStringFromFile("connectionString.txt");
 
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
@@ -253,9 +246,9 @@ namespace DesafioImportaExcel.Controllers
                         INSERT INTO Debitos (Fatura, Cliente, Emissao, Vencimento, Valor, Juros, Descontos, Pagamento, ValorPago)
                         VALUES (@Fatura, @Cliente, @Emissao, @Vencimento, @Valor, @Juros, @Descontos, @Pagamento, @ValorPago)";
 
-                        debitos.Emissao = Utilitarios.ConverteParaDataValida(debitos.Emissao.ToString());
-                        debitos.Vencimento = Utilitarios.ConverteParaDataValida(debitos.Vencimento.ToString());
-                        if (debitos.Pagamento != null) Utilitarios.ConverteParaDataValida(debitos.Pagamento.ToString());
+                        //debitos.Emissao = Utilitarios.ConverteParaDataValida(debitos.Emissao.ToString());
+                        //debitos.Vencimento = Utilitarios.ConverteParaDataValida(debitos.Vencimento.ToString());
+                        //if (debitos.Pagamento != null) Utilitarios.ConverteParaDataValida(debitos.Pagamento.ToString());
 
                         using (SqlCommand command = new SqlCommand(insertQuery, connection))
                         {

@@ -1,9 +1,10 @@
 {
   "version": 2,
-  "dgSpecHash": "YwQxXde1Bl4gmmrURME2wklgLGjExTBmg9N6pDy7IjnQW3mfxwzUIssqk3DhoC1I6AOMVx2gfVbrAdRtxxca0w==",
+  "dgSpecHash": "urhSbCUCc51eCuPZ2rjP4xPnP/2Gpro2EWpWXuWvKJOJBCM5A8ur2ey5l54vdNd+w6kJX3QuEJgpn7D9GwKVUw==",
   "success": true,
   "projectFilePath": "C:\\Users\\mathe\\OneDrive\\Documents\\Codes\\CSharp\\DesafioImportaExcel\\DesafioImportaExcel.csproj",
   "expectedPackageFiles": [
+    "C:\\Users\\mathe\\.nuget\\packages\\csvhelper\\30.0.1\\csvhelper.30.0.1.nupkg.sha512",
     "C:\\Users\\mathe\\.nuget\\packages\\epplus\\6.2.10\\epplus.6.2.10.nupkg.sha512",
     "C:\\Users\\mathe\\.nuget\\packages\\epplus.interfaces\\6.1.1\\epplus.interfaces.6.1.1.nupkg.sha512",
     "C:\\Users\\mathe\\.nuget\\packages\\epplus.system.drawing\\6.1.1\\epplus.system.drawing.6.1.1.nupkg.sha512",

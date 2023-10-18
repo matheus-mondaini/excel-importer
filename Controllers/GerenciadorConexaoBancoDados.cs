@@ -30,6 +30,20 @@ namespace DesafioImportaExcel.Controllers
             return new SqlConnection(connectionString);
         }
 
+        public static string ReadConnectionStringFromFile(string filePath)
+        {
+            try
+            {
+                string connectionString = File.ReadAllText(filePath);
+                return connectionString;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Erro ao ler a Connection String do arquivo: {ex.Message}");
+                return string.Empty;
+            }
+        }
+
     }
 
 }

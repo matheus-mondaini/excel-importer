@@ -74,7 +74,8 @@ namespace DesafioImportaExcel
                 var escolhaPlanilhaForm = new EscolhaPlanilhaForm(planilhas);
                 if (escolhaPlanilhaForm.ShowDialog() == DialogResult.OK)
                 {
-                    return planilhas.IndexOf(escolhaPlanilhaForm.PlanilhaSelecionada);
+                    int index = planilhas.IndexOf(escolhaPlanilhaForm.PlanilhaSelecionada);
+                    return index >= 0 ? index : (int?)null;
                 }
             }
             return null;
