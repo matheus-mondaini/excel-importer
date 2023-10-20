@@ -28,17 +28,9 @@ namespace DesafioImportaExcel
         //    return SqlDateTime.MinValue.Value;
         //}
 
-        //public static CultureInfo GetSessionCulture(this SqlConnection connection)
-        //{
-        //    using (SqlCommand cmd = new SqlCommand("SELECT @@language", connection))
-        //    {
-        //        return new CultureInfo(cmd.ExecuteScalar().ToString());
-        //    }
-        //}
-
         public static CultureInfo GetSessionCulture(this SqlConnection connection)
         {
-            using (SqlCommand cmd = new SqlCommand("SELECT @@language", connection))
+            using (SqlCommand cmd = new SqlCommand("SELECT @@language", connection)) // "SELECT [language] FROM sys.dm_exec_sessions WHERE session_id = @@SPID"
             {
                 var language = cmd.ExecuteScalar().ToString();
                 if (!string.IsNullOrEmpty(language))
