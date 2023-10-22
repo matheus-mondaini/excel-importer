@@ -21,7 +21,9 @@ namespace DesafioImportaExcel.Controllers
 
             try
             {
-                using (SqlConnection connection = new SqlConnection("Server=Gemini\\SQL2019;Database=Desafio_Planilha;User Id=sa;Password=cdssql;"))
+                string connectionString = GerenciadorConexaoBancoDados.ReadConnectionStringFromFile("connectionString.txt");
+
+                using (SqlConnection connection = new SqlConnection(connectionString))
                 {
                     connection.Open();
 

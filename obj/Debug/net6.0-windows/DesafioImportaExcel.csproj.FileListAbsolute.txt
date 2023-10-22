@@ -119,3 +119,4 @@ C:\Users\mondaini\Documents\Codes\csharp\DesafioImportaExcel\obj\Debug\net6.0-wi
 C:\Users\matheus.alegre\Documents\CSharp\DesafioImportaExcel\obj\Debug\net6.0-windows\DesafioImportaExcel.EscolhaPlanilhaForm.resources
 C:\Users\mathe\OneDrive\Documents\Codes\CSharp\DesafioImportaExcel\obj\Debug\net6.0-windows\DesafioImportaExcel.EscolhaPlanilhaForm.resources
 C:\Users\mathe\OneDrive\Documents\Codes\CSharp\DesafioImportaExcel\bin\Debug\net6.0-windows\CsvHelper.dll
+C:\Users\mathe\OneDrive\Documents\Codes\CSharp\DesafioImportaExcel\bin\Debug\net6.0-windows\connectionString.txt
