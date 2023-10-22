@@ -259,7 +259,14 @@ namespace DesafioImportaExcel.Controllers
                             command.Parameters.AddWithValue("@Valor", debitos.Valor);
                             command.Parameters.AddWithValue("@Juros", debitos.Juros);
                             command.Parameters.AddWithValue("@Descontos", debitos.Descontos);
-                            command.Parameters.Add("@Pagamento", SqlDbType.DateTime).Value = (object)debitos.Pagamento ?? DBNull.Value;
+                            if (debitos.Pagamento != null)
+                            {
+                                command.Parameters.Add("@Pagamento", SqlDbType.DateTime).Value = debitos.Pagamento;
+                            }
+                            else
+                            {
+                                command.Parameters.Add("@Pagamento", SqlDbType.DateTime).Value = DBNull.Value;
+                            }
                             command.Parameters.AddWithValue("@ValorPago", debitos.ValorPago);
 
                             command.ExecuteNonQuery();
