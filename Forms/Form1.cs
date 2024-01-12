@@ -8,6 +8,7 @@ using System;
 using Microsoft.VisualBasic.ApplicationServices;
 using DesafioImportaExcel.Controllers;
 using DesafioImportaExcel.Models;
+using System.IO.Packaging;
 
 namespace DesafioImportaExcel
 {
@@ -40,21 +41,25 @@ namespace DesafioImportaExcel
                     }
                     else
                     {
-                        int? planilhaSelecionadaIndex = EscolherPlanilha(excelFilePath, planilhas);
-
-                        if (planilhaSelecionadaIndex != null)
+                        int? planilhaSelecionadaIndex = null;
+                        var escolhaPlanilhaForm = new EscolhaPlanilhaForm(planilhas);
+                        if (escolhaPlanilhaForm.ShowDialog() == DialogResult.OK)
                         {
-                            string planilhaSelecionadaNome = planilhas[planilhaSelecionadaIndex.Value];
-                            List<dynamic>? dados = ImportacaoPlanilhaExcel.ReadDataFromExcel(excelFilePath, (int)planilhaSelecionadaIndex);
+                            planilhaSelecionadaIndex = planilhas.IndexOf(escolhaPlanilhaForm.PlanilhaSelecionada ?? "");
+                        }
+
+                        if (planilhaSelecionadaIndex == null)
+                        {
+                            MessageBox.Show("Nenhum WorkSheet foi selecionado.");
+                        }
+                        else
+                        {
+                            List<object>? dados = ImportacaoPlanilhaExcel.ReadDataFromExcel(excelFilePath, (int)planilhaSelecionadaIndex);
                             dataGridView1.DataSource = dados;
 
                             worksheetIndex = planilhaSelecionadaIndex;
                             planilhaLida = true;
                             btnInserirNoBanco.Enabled = true;
-                        }
-                        else
-                        {
-                            MessageBox.Show("Nenhum WorkSheet foi selecionado.");
                         }
                     }
                 }
@@ -63,21 +68,6 @@ namespace DesafioImportaExcel
                     MessageBox.Show("Ocorreu um erro ao ler a planilha: " + ex.Message);
                 }
             }
-        }
-
-        private int? EscolherPlanilha(FileInfo excelFilePath, List<string> planilhas)
-        {
-            using (var package = new ExcelPackage(excelFilePath))
-            {
-                var worksheets = package.Workbook.Worksheets;
-
-                var escolhaPlanilhaForm = new EscolhaPlanilhaForm(planilhas);
-                if (escolhaPlanilhaForm.ShowDialog() == DialogResult.OK)
-                {
-                    return planilhas.IndexOf(escolhaPlanilhaForm.PlanilhaSelecionada ?? "");
-                }
-            }
-            return null;
         }
 
         private void btnInserirNoBanco_Click(object sender, EventArgs e)

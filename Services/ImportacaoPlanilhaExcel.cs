@@ -38,9 +38,9 @@ namespace DesafioImportaExcel.Controllers
             return worksheetNames;
         }
 
-        public static List<dynamic>? ReadDataFromExcel(FileInfo excelFilePath, int worksheetIndex)
+        public static List<object>? ReadDataFromExcel(FileInfo excelFilePath, int worksheetIndex)
         {
-            var listaGenerica = new List<dynamic>();
+            var listaGenerica = new List<object>();
             if (worksheetIndex == 0)
             {
                 List<Cliente> cliente = ReadClientesFromExcel(excelFilePath, worksheetIndex);
