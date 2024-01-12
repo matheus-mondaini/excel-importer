@@ -38,7 +38,7 @@ namespace DesafioImportaExcel.Controllers
             return worksheetNames;
         }
 
-        public static List<object>? ReadDataFromExcel(FileInfo excelFilePath, int worksheetIndex)
+        public static List<object>? LerDados(FileInfo excelFilePath, int worksheetIndex)
         {
             var listaGenerica = new List<object>();
             if (worksheetIndex == 0)
@@ -61,7 +61,7 @@ namespace DesafioImportaExcel.Controllers
 
         public static List<Debitos> ReadDebitosFromExcel(FileInfo excelFilePath, int worksheetIndex)
         {
-            var debitosList = new List<Debitos>();
+            var listaDebitos = new List<Debitos>();
 
             ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
 
@@ -155,7 +155,7 @@ namespace DesafioImportaExcel.Controllers
                             debito.ValorPago = valorPago;
                         }
 
-                        debitosList.Add(debito);
+                        listaDebitos.Add(debito);
                     }
                 }
             }
@@ -163,11 +163,11 @@ namespace DesafioImportaExcel.Controllers
             {
                 MessageBox.Show("Ocorreu um erro: " + ex.Message);
             }
-            return debitosList;
+            return listaDebitos;
         }
         public static List<Cliente> ReadClientesFromExcel(FileInfo excelFilePath, int worksheetIndex)
         {
-            var clientesList = new List<Cliente>();
+            var listaClientes = new List<Cliente>();
 
             ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
 
@@ -189,7 +189,7 @@ namespace DesafioImportaExcel.Controllers
                         cliente.CEP = worksheet.Cells[row, 5].Text;
                         cliente.CPF = worksheet.Cells[row, 6].Text;
 
-                        clientesList.Add(cliente);
+                        listaClientes.Add(cliente);
                     }
                 }
             }
@@ -197,10 +197,10 @@ namespace DesafioImportaExcel.Controllers
             {
                 MessageBox.Show("Ocorreu um erro na leitura da planilha Cliente: " + ex.Message);
             }
-            return clientesList;
+            return listaClientes;
         }
 
-        public static void InsertDataIntoDatabase<T>(List<T> data, int worksheetIndex)
+        public static void InserirNoBanco<T>(List<T> dados, int worksheetIndex)
 
         {
             string connectionString = GerenciadorConexaoBancoDados.ReadConnectionStringFromFile("connectionString.txt");
@@ -209,7 +209,7 @@ namespace DesafioImportaExcel.Controllers
             {
                 connection.Open();
 
-                foreach (var item in data)
+                foreach (var item in dados)
                 {
                     string insertQuery = "";
                     if (worksheetIndex == 0 && item is Cliente cliente)
@@ -245,10 +245,6 @@ namespace DesafioImportaExcel.Controllers
                         insertQuery = @"
                         INSERT INTO Debitos (Fatura, Cliente, Emissao, Vencimento, Valor, Juros, Descontos, Pagamento, ValorPago)
                         VALUES (@Fatura, @Cliente, @Emissao, @Vencimento, @Valor, @Juros, @Descontos, @Pagamento, @ValorPago)";
-
-                        //debitos.Emissao = Utilitarios.ConverteParaDataValida(debitos.Emissao.ToString());
-                        //debitos.Vencimento = Utilitarios.ConverteParaDataValida(debitos.Vencimento.ToString());
-                        //if (debitos.Pagamento != null) Utilitarios.ConverteParaDataValida(debitos.Pagamento.ToString());
 
                         using (SqlCommand command = new SqlCommand(insertQuery, connection))
                         {

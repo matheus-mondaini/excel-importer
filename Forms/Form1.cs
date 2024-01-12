@@ -37,7 +37,7 @@ namespace DesafioImportaExcel
 
                     if (planilhas.Count == 0)
                     {
-                        MessageBox.Show("O arquivo Excel não contém planilhas.");
+                        MessageBox.Show("O arquivo Excel nï¿½o contï¿½m planilhas.");
                     }
                     else
                     {
@@ -54,7 +54,7 @@ namespace DesafioImportaExcel
                         }
                         else
                         {
-                            List<object>? dados = ImportacaoPlanilhaExcel.ReadDataFromExcel(excelFilePath, (int)planilhaSelecionadaIndex);
+                            List<object>? dados = ImportacaoPlanilhaExcel.LerDados(excelFilePath, (int)planilhaSelecionadaIndex);
                             dataGridView1.DataSource = dados;
 
                             worksheetIndex = planilhaSelecionadaIndex;
@@ -78,23 +78,23 @@ namespace DesafioImportaExcel
                 {
                     try
                     {
-                        List<object> data = new List<object>();
+                        List<object> dados = new List<object>();
                         foreach (DataGridViewRow dgvRow in dataGridView1.Rows)
                         {
                             if (!dgvRow.IsNewRow)
                             {
                                 if (worksheetIndex == 0)
                                 {
-                                    data.Add((Cliente)dgvRow.DataBoundItem);
+                                    dados.Add((Cliente)dgvRow.DataBoundItem);
                                 }
                                 else if (worksheetIndex == 1)
                                 {
-                                    data.Add((Debitos)dgvRow.DataBoundItem);
+                                    dados.Add((Debitos)dgvRow.DataBoundItem);
                                 }
                             }
                         }
 
-                        ImportacaoPlanilhaExcel.InsertDataIntoDatabase(data, (int)worksheetIndex);
+                        ImportacaoPlanilhaExcel.InserirNoBanco(dados, (int)worksheetIndex);
                         MessageBox.Show("Dados inseridos com sucesso no banco de dados!");
                     }
                     catch (Exception ex)
@@ -111,7 +111,7 @@ namespace DesafioImportaExcel
             using (SaveFileDialog saveFileDialog = new SaveFileDialog())
             {
                 saveFileDialog.Filter = "Arquivos CSV (*.csv)|*.csv";
-                saveFileDialog.Title = "Escolha o local e o nome do arquivo de exportação";
+                saveFileDialog.Title = "Escolha o local e o nome do arquivo de exportaï¿½ï¿½o";
                 if (saveFileDialog.ShowDialog() == DialogResult.OK)
                 {
                     DateTimePicker startDatePicker = new DateTimePicker();
@@ -121,13 +121,13 @@ namespace DesafioImportaExcel
                     startDatePicker.Location = new Point(10, 10);
                     endDatePicker.Location = new Point(10, 40);
                     Label startDateLabel = new Label();
-                    startDateLabel.Text = "Data de Início:";
+                    startDateLabel.Text = "Data de Inï¿½cio:";
                     startDateLabel.Location = new Point(10, 10);
                     Label endDateLabel = new Label();
-                    endDateLabel.Text = "Data de Término:";
+                    endDateLabel.Text = "Data de Tï¿½rmino:";
                     endDateLabel.Location = new Point(10, 40);
                     Form dateRangeForm = new Form();
-                    dateRangeForm.Text = "Escolha o Período de Exportação";
+                    dateRangeForm.Text = "Escolha o Perï¿½odo de Exportaï¿½ï¿½o";
                     dateRangeForm.ClientSize = new Size(250, 130);
                     Button exportButton = new Button();
                     exportButton.Text = "Exportar";
