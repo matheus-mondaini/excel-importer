@@ -9,6 +9,7 @@ using Microsoft.VisualBasic.ApplicationServices;
 using DesafioImportaExcel.Controllers;
 using DesafioImportaExcel.Models;
 using System.IO.Packaging;
+using System.Data.Common;
 
 namespace DesafioImportaExcel
 {
@@ -20,6 +21,7 @@ namespace DesafioImportaExcel
         public Form1()
         {
             InitializeComponent();
+
         }
 
         private void btnLerPlanilha_Click(object sender, EventArgs e)

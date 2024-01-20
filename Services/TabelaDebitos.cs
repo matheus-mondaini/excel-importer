@@ -10,21 +10,12 @@ namespace DesafioImportaExcel.Controllers
 {
     public class TabelaDebitos
     {
-        private readonly string _connectionString;
-
-        public TabelaDebitos(string connectionString)
-        {
-            _connectionString = connectionString;
-        }
-
         public void CriarTabelaSeNaoExistir()
         {
-            using (SqlConnection connection = new SqlConnection(_connectionString))
+            using (SqlConnection connection = GerenciadorConexaoBancoDados.Conectar())
             {
                 try
                 {
-                    connection.Open();
-
                     string createTableQuery = @"
                         IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = 'Debitos')
                         BEGIN

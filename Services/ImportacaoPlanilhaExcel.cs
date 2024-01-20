@@ -203,18 +203,14 @@ namespace DesafioImportaExcel.Controllers
         public static void InserirNoBanco<T>(List<T> dados, int worksheetIndex)
 
         {
-            string connectionString = GerenciadorConexaoBancoDados.ReadConnectionStringFromFile("connectionString.txt");
-
-            using (SqlConnection connection = new SqlConnection(connectionString))
+            using (var connection = GerenciadorConexaoBancoDados.Conectar())
             {
-                connection.Open();
-
                 foreach (var item in dados)
                 {
                     string insertQuery = "";
                     if (worksheetIndex == 0 && item is Cliente cliente)
                     {
-                        TabelaCliente tabelaCliente = new TabelaCliente(connectionString);
+                        TabelaCliente tabelaCliente = new TabelaCliente();
                         tabelaCliente.CriarTabelaSeNaoExistir();
                         {
                             insertQuery = "SET IDENTITY_INSERT Cliente ON; ";
@@ -240,7 +236,7 @@ namespace DesafioImportaExcel.Controllers
                     }
                     else if (worksheetIndex == 1 && item is Debitos debitos)
                     {
-                        TabelaDebitos tabelaDebitos = new TabelaDebitos(connectionString);
+                        TabelaDebitos tabelaDebitos = new TabelaDebitos();
                         tabelaDebitos.CriarTabelaSeNaoExistir();
                         insertQuery = @"
                         INSERT INTO Debitos (Fatura, Cliente, Emissao, Vencimento, Valor, Juros, Descontos, Pagamento, ValorPago)

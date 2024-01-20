@@ -18,54 +18,47 @@ namespace DesafioImportaExcel.Controllers
     {
         public static void Exportar(string filePath, DateTime dataInicio, DateTime dataFim)
         {
-
             try
             {
-                string connectionString = GerenciadorConexaoBancoDados.ReadConnectionStringFromFile("connectionString.txt");
-
-                using (SqlConnection connection = new SqlConnection(connectionString))
+                using (var command = GerenciadorConexaoBancoDados.Conectar().CreateCommand())
                 {
-                    connection.Open();
-
-                    using (SqlCommand command = new SqlCommand(
+                    command.CommandText =
                         "SELECT " +
                             "'CLIENTE' AS Tipo, cli.Nome AS Nome, cli.CPF AS CPF, cli.Cidade AS Cidade, 'DEBITO' AS Tipo, deb.Fatura AS Fatura, deb.Emissao AS Emissao, deb.Vencimento AS Vencimento, " +
                             "deb.Valor AS Valor, deb.ValorPago AS ValorPago, deb.Pagamento AS Pagamento " +
                         "FROM " +
                             "Debitos deb " +
                             "LEFT JOIN CLIENTE cli ON cli.ID = deb.Cliente " +
-                        "WHERE deb.Emissao BETWEEN @StartDate AND @EndDate", connection))
+                        "WHERE deb.Emissao BETWEEN @StartDate AND @EndDate";
+
+                    command.Parameters.Add("@StartDate", SqlDbType.DateTime).Value = dataInicio;
+                    command.Parameters.Add("@EndDate", SqlDbType.DateTime).Value = dataFim;
+
+                    using (SqlDataAdapter dataAdapter = new SqlDataAdapter(command))
                     {
+                        DataTable dataTable = new DataTable();
+                        dataAdapter.Fill(dataTable);
 
-                        command.Parameters.Add("@StartDate", SqlDbType.DateTime).Value = dataInicio;
-                        command.Parameters.Add("@EndDate", SqlDbType.DateTime).Value = dataFim;
+                        StringBuilder csvData = new StringBuilder();
 
-                        using (SqlDataAdapter dataAdapter = new SqlDataAdapter(command))
+                        foreach (DataColumn column in dataTable.Columns)
                         {
-                            DataTable dataTable = new DataTable();
-                            dataAdapter.Fill(dataTable);
+                            csvData.Append(column.ColumnName + "|");
+                        }
+                        csvData.AppendLine();
 
-                            StringBuilder csvData = new StringBuilder();
-
+                        foreach (DataRow row in dataTable.Rows)
+                        {
                             foreach (DataColumn column in dataTable.Columns)
                             {
-                                csvData.Append(column.ColumnName + "|");
+                                csvData.Append(row[column].ToString() + "|");
                             }
                             csvData.AppendLine();
-
-                            foreach (DataRow row in dataTable.Rows)
-                            {
-                                foreach (DataColumn column in dataTable.Columns)
-                                {
-                                    csvData.Append(row[column].ToString() + "|");
-                                }
-                                csvData.AppendLine();
-                            }
-
-                            File.WriteAllText(filePath, csvData.ToString());
-
-                            MessageBox.Show("Data exported to CSV successfully.");
                         }
+
+                        File.WriteAllText(filePath, csvData.ToString());
+
+                        MessageBox.Show("Data exported to CSV successfully.");
                     }
                 }
             }
