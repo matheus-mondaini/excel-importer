@@ -13,7 +13,7 @@ namespace DesafioImportaExcel.Controllers
     public class GerenciadorConexaoBancoDados
     {
 
-        public static String connectionString = ConfigurationManager.ConnectionStrings["MyDBConnectionString"].ConnectionString.ToString();
+        public static string connectionString = System.Configuration.ConfigurationManager.ConnectionStrings["ConnectionString1"].ConnectionString.ToString();
         private static SqlConnection sqlConnection = new SqlConnection(connectionString);
         
         public static SqlConnection Conectar()
