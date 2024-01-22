@@ -4,7 +4,7 @@
     <Compile Update="Forms\EscolhaPlanilhaForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Update="Forms\Form1.cs">
+    <Compile Update="Forms\Menu.cs">
       <SubType>Form</SubType>
     </Compile>
   </ItemGroup>

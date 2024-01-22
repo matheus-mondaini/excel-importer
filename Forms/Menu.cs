@@ -10,15 +10,16 @@ using DesafioImportaExcel.Controllers;
 using DesafioImportaExcel.Models;
 using System.IO.Packaging;
 using System.Data.Common;
+using OfficeOpenXml.FormulaParsing.Excel.Functions.DateTime;
 
 namespace DesafioImportaExcel
 {
-    public partial class Form1 : Form
+    public partial class Menu : Form
     {
         private bool planilhaLida = false;
         int? worksheetIndex = null;
 
-        public Form1()
+        public Menu()
         {
             InitializeComponent();
 
@@ -81,21 +82,27 @@ namespace DesafioImportaExcel
                     try
                     {
                         List<object> dados = new List<object>();
-                        foreach (DataGridViewRow dgvRow in dataGridView1.Rows)
+                        if (worksheetIndex == 0)
                         {
-                            if (!dgvRow.IsNewRow)
+                            foreach (DataGridViewRow dgvRow in dataGridView1.Rows)
                             {
-                                if (worksheetIndex == 0)
+                                if (!dgvRow.IsNewRow)
                                 {
                                     dados.Add((Cliente)dgvRow.DataBoundItem);
                                 }
-                                else if (worksheetIndex == 1)
-                                {
-                                    dados.Add((Debitos)dgvRow.DataBoundItem);
-                                }
                             }
                         }
-
+                        else if (worksheetIndex == 1)
+                        {
+                            foreach (DataGridViewRow dgvRow in dataGridView1.Rows)
+                            {
+                                if (!dgvRow.IsNewRow)
+                                {
+                                    dados.Add((Cliente)dgvRow.DataBoundItem);
+                                }
+                                dados.Add((Debitos)dgvRow.DataBoundItem);
+                            }
+                        }
                         ImportacaoPlanilhaExcel.InserirNoBanco(dados, (int)worksheetIndex);
                         MessageBox.Show("Dados inseridos com sucesso no banco de dados!");
                     }
