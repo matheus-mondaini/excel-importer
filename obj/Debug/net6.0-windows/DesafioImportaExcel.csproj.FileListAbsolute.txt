@@ -77,7 +77,6 @@ C:\Users\matheus.alegre\Documents\CSharp\DesafioImportaExcel\obj\Debug\net6.0-wi
 C:\Users\matheus.alegre\Documents\CSharp\DesafioImportaExcel\obj\Debug\net6.0-windows\DesafioImportaExcel.Properties.Resources.resources
 C:\Users\mondaini\Documents\Codes\csharp\DesafioImportaExcel\obj\Debug\net6.0-windows\DesafioImportaExcel.Properties.Resources.resources
 C:\Users\mathe\OneDrive\Documents\Codes\CSharp\DesafioImportaExcel\obj\Debug\net6.0-windows\DesafioImportaExcel.csproj.AssemblyReference.cache
-C:\Users\mathe\OneDrive\Documents\Codes\CSharp\DesafioImportaExcel\obj\Debug\net6.0-windows\DesafioImportaExcel.Form1.resources
 C:\Users\mathe\OneDrive\Documents\Codes\CSharp\DesafioImportaExcel\obj\Debug\net6.0-windows\DesafioImportaExcel.Properties.Resources.resources
 C:\Users\mathe\OneDrive\Documents\Codes\CSharp\DesafioImportaExcel\obj\Debug\net6.0-windows\DesafioImportaExcel.csproj.GenerateResource.cache
 C:\Users\mathe\OneDrive\Documents\Codes\CSharp\DesafioImportaExcel\obj\Debug\net6.0-windows\DesafioImportaExcel.GeneratedMSBuildEditorConfig.editorconfig
@@ -119,4 +118,5 @@ C:\Users\mondaini\Documents\Codes\csharp\DesafioImportaExcel\obj\Debug\net6.0-wi
 C:\Users\matheus.alegre\Documents\CSharp\DesafioImportaExcel\obj\Debug\net6.0-windows\DesafioImportaExcel.EscolhaPlanilhaForm.resources
 C:\Users\mathe\OneDrive\Documents\Codes\CSharp\DesafioImportaExcel\obj\Debug\net6.0-windows\DesafioImportaExcel.EscolhaPlanilhaForm.resources
 C:\Users\mathe\OneDrive\Documents\Codes\CSharp\DesafioImportaExcel\bin\Debug\net6.0-windows\CsvHelper.dll
-C:\Users\mathe\OneDrive\Documents\Codes\CSharp\DesafioImportaExcel\bin\Debug\net6.0-windows\connectionString.txt
+C:\Users\mathe\OneDrive\Documents\Codes\CSharp\DesafioImportaExcel\bin\Debug\net6.0-windows\DesafioImportaExcel.dll.config
+C:\Users\mathe\OneDrive\Documents\Codes\CSharp\DesafioImportaExcel\obj\Debug\net6.0-windows\DesafioImportaExcel.Menu.resources

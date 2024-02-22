@@ -81,7 +81,7 @@ namespace DesafioImportaExcel
                 {
                     try
                     {
-                        List<object> dados = new List<object>();
+                        var dados = new List<object>();
                         if (worksheetIndex == 0)
                         {
                             foreach (DataGridViewRow dgvRow in dataGridView1.Rows)
